@@ -1,66 +1,72 @@
-import { useState } from "react";
+import { useEffect } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js';
 
-const AccountOverviewWidget = () => {
-  // Sample data for accounts, deposits, and loans
-  const [accounts, setAccounts] = useState([
-    { name: "Current Account", balance: "5000 PLN" },
-    { name: "Savings Account", balance: "15000 PLN" },
-  ]);
+// Rejestracja niezbędnych elementów w Chart.js
+ChartJS.register(
+  CategoryScale,   // Skala kategoryczna (dla osi X)
+  LinearScale,     // Skala liniowa (dla osi Y)
+  BarElement,      // Element słupkowy
+  Title,           // Tytuł wykresu
+  Tooltip,         // Narzędzie podpowiedzi
+  Legend           // Legenda
+);
 
-  const [deposits, setDeposits] = useState([
-    { name: "3-month Deposit", amount: "10000 PLN", interest: "1.5%" },
-    { name: "6-month Deposit", amount: "15000 PLN", interest: "2.0%" },
-  ]);
+// Przykładowe dane wykresu
+const chartData = {
+  labels: ['Account 1', 'Account 2', 'Account 3'],  // Etykiety dla osi X
+  datasets: [
+    {
+      label: 'Balance',
+      data: [5000, 15000, 10000],  // Wartości do wyświetlenia
+      backgroundColor: 'rgba(0, 148, 157, 0.5)',  // Kolor słupków
+    },
+  ],
+};
 
-  const [loans, setLoans] = useState([
-    { name: "Mortgage Loan", amount: "200000 PLN", interest: "3.5%" },
-    { name: "Personal Loan", amount: "10000 PLN", interest: "7.0%" },
-  ]);
+// Opcje wykresu z poprawnym typowaniem
+const options: ChartOptions<'bar'> = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top',  // Pozycja legendy
+    },
+    tooltip: {
+      callbacks: {
+        label: (context) => {
+          return `${context.dataset.label}: ${context.raw} EUR`;  // Formatowanie tooltipa
+        },
+      },
+    },
+  },
+  scales: {
+    x: {
+      beginAtZero: true,  // Rozpoczynanie osi X od zera
+    },
+    y: {
+      beginAtZero: true,  // Rozpoczynanie osi Y od zera
+    },
+  },
+};
+
+const AccountSummaryWidget = () => {
+  useEffect(() => {
+    // Możesz dodać inne logiki związane z wykresem tutaj, np. ładowanie danych
+    return () => {
+      // Może być konieczne czyszczenie po wykresie
+    };
+  }, []);
 
   return (
-    <div className="p-8 bg-[#d1f1e5] text-commerzBlue max-w-md mx-auto rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Account Overview</h2>
+    <div className="p-8 bg-commerzBrightGreen text-commerzBlue max-w-md mx-auto rounded-lg shadow-lg cursor-pointer">
+      <h2 className="text-2xl font-bold mb-4">Account Summary</h2>
 
-      {/* Accounts */}
+      {/* Wykres wyświetlający dane */}
       <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Accounts</h3>
-        <ul>
-          {accounts.map((account, index) => (
-            <li key={index} className="mb-2 flex justify-between">
-              <span>{account.name}</span>
-              <span>{account.balance}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Term Deposits */}
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Term Deposits</h3>
-        <ul>
-          {deposits.map((deposit, index) => (
-            <li key={index} className="mb-2 flex justify-between">
-              <span>{deposit.name}</span>
-              <span>{deposit.amount} ({deposit.interest} interest)</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Loans */}
-      <div>
-        <h3 className="text-xl font-semibold mb-2">Loans</h3>
-        <ul>
-          {loans.map((loan, index) => (
-            <li key={index} className="mb-2 flex justify-between">
-              <span>{loan.name}</span>
-              <span>{loan.amount} ({loan.interest} interest)</span>
-            </li>
-          ))}
-        </ul>
+        <Bar data={chartData} options={options} />
       </div>
     </div>
   );
 };
 
-export default AccountOverviewWidget;
+export default AccountSummaryWidget;
