@@ -6,7 +6,9 @@ function App() {
   return (
     <div className="App">
      <Header />
-     
+      <div className="flex items-center justify-center w-full h-screen"> 
+        
+      </div>
     </div>
   );
 }
