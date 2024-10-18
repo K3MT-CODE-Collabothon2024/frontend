@@ -9,7 +9,7 @@ function App() {
     <div className="App">
      <Header />
       <div className="flex items-center justify-center w-full h-screen"> 
-        <DueTasksWidget isWide ={true} />
+        <DueTasksWidget isWide ={false} tasks ={tasks} />
      </div>
     </div>
   );
