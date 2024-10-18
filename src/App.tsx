@@ -1,13 +1,16 @@
-import "./App.css";
-import logo from "./logo.svg";
-import Header from "./widgets/header";
-import AccountSummaryWidget from "./widgets/AccountSummaryWidget";
+import React from 'react';
+import './App.css';
+import AccountSummaryWidget from './widgets/AccountSummaryWidget';
+import BaseWidget from './widgets/BaseWidget';
 
 function App() {
   return (
     <div className="App">
-     <Header />
-     
+      {/* Dodanie BaseWidget, który zawiera AccountSummaryWidget jako content */}
+      <BaseWidget
+        isWide={false} // Ustawia szerokość widgetu
+        content={<AccountSummaryWidget />} // Wstawienie AccountSummaryWidget jako zawartość
+      />
     </div>
   );
 }

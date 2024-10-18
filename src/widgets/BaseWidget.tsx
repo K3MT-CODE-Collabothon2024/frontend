@@ -4,11 +4,10 @@ import { motion } from 'framer-motion';
 // Interfejs dla podstawowego widgetu
 interface BaseWidgetProps {
   isWide: boolean;  // Określa, czy widget ma być szeroki
-  title: string;    // Tytuł widgetu
   content: React.ReactNode;  // Zawartość widgetu, którą można modyfikować w dziedziczących widgetach
 }
 
-const BaseWidget: React.FC<BaseWidgetProps> = ({ isWide, title, content }) => {
+const BaseWidget: React.FC<BaseWidgetProps> = ({ isWide, content }) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
 
   // Funkcja do obsługi kliknięcia na widget
@@ -32,11 +31,6 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ isWide, title, content }) => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        {/* Nagłówek widgetu */}
-        <div className="flex justify-center items-center w-full">
-          <h1 className="text-4xl break-words">{title}</h1>  {/* break-words, aby długie słowa nie rozciągały widgetu */}
-        </div>
-
         {/* Zawartość widgetu */}
         <div className="text-center mt-4 flex-grow w-full p-2 overflow-hidden flex items-center justify-center">
           {content}

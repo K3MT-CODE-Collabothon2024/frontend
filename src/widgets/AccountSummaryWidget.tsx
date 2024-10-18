@@ -101,24 +101,6 @@ const AccountSummaryWidget = () => {
   const [isModalOpen, setModalOpen] = useState(false); // Stan do obsługi otwarcia modalu
   const [isDarkBackground, setDarkBackground] = useState(false); // Stan do zarządzania ciemnym tłem
 
-  // Funkcja do otwierania modalu
-  const openModal = () => {
-    setDarkBackground(true);  // Ustawienie ciemnego tła
-    setModalOpen(true);  // Otwieranie modalu
-  };
-
-  // Funkcja do zamykania modalu
-  const closeModal = () => {
-    setDarkBackground(false);  // Przywracenie normalnego tła
-    setModalOpen(false);  // Zamknięcie modalu
-  };
-
-  useEffect(() => {
-    return () => {
-      // Można dodać czyszczenie po wykresie lub inne operacje po unmount
-    };
-  }, []);
-
   return (
     <>
       {/* Tło, które będzie ciemniało po kliknięciu */}
@@ -127,7 +109,7 @@ const AccountSummaryWidget = () => {
       )}
 
       {/* Główny widget */}
-      <div className="p-6 bg-commerzBrightGreen text-commerzBlue max-w-7x1 mx-auto rounded-lg shadow-lg cursor-pointer " onClick={openModal}>
+      <div>
         <h2 className="text-2xl font-bold mb-4">Account Summary</h2>
         {/* Wykres wyświetlający dane */}
         <div className="mb-6">
@@ -142,7 +124,6 @@ const AccountSummaryWidget = () => {
           <div className="mb-6">
             <Bar data={chartData} options={options} />
           </div>
-          <button onClick={closeModal} className="bg-commerzBlue text-white px-4 py-2 rounded-lg">Close</button>
         </div>
       )}
     </>
