@@ -1,8 +1,8 @@
 
 const Header = () => {
   return (
-    <header className="p-4 bg-commerzBlue text-commerzYellow">
-      <h1 className="text-4xl font-bold text-center">Commerzbank</h1>
+    <header className="p-8 bg-commerzBlue text-commerzYellow">
+      <h1 className="text-4xl text-center f">Commerzbank</h1>
     </header>
   );
 };

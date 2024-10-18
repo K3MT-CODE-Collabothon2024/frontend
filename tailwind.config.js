@@ -9,6 +9,9 @@ module.exports = {
         commerzYellow: '#FFE900',
         commerzBlue: '#00414B',
       },
+      fontFamily: {
+        sans: ['Gotham', 'sans-serif'],  // Set Gotham as the default sans-serif
+      },
     },
   },
   plugins: [],
