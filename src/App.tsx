@@ -6,8 +6,9 @@ import AccountSummaryWidget from "./widgets/AccountSummaryWidget";
 function App() {
   return (
     <div className="App">
-     <Header />
-      <div className="flex items-center justify-center w-full h-screen"> 
+      <Header />
+      <div className="flex items-center justify-center w-full h-screen">
+      
         <AccountSummaryWidget/>
       </div>
     </div>
