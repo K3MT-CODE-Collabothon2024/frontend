@@ -3,8 +3,8 @@
   "1": {
     "content": "AccountSummaryWidget/AccountSummaryWidgetWide",
     "popup": "AccountSummaryWidget/AccountSummaryPopup",
-    "width": 4,
-    "height": 4,
+    "width": 1,
+    "height": 2,
     "startPosition": 7
   },
   "2": {
@@ -13,6 +13,13 @@
     "width": 1,
     "height": 2,
     "startPosition": 9
+  },
+  "3": {
+    "content": "DueTasksWidget/DueTasksWidgetTight",
+    "popup": "DueTasksWidget/DueTasksPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 1
   },
   "0": {
     "content": "AddWidget/AddWidget",
