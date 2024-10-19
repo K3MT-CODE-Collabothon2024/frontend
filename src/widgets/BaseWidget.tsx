@@ -1,50 +1,50 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import closeIcon from '../icons/close_icon.png';
 
 interface BaseWidgetProps {
-  isWide: boolean;  // Determines whether the widget should be wide
-  title: string;    // Title of the widget
-  content_before_pop_up: React.ReactNode;  // Content before the pop-up
-  content_after_pop_up: React.ReactNode;   // Content inside the pop-up
+  contentWidget: React.ReactNode;
+  contentPopup: React.ReactNode;
 }
 
-const BaseWidget: React.FC<BaseWidgetProps> = ({ isWide, title, content_before_pop_up, content_after_pop_up }) => {
+const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget, contentPopup }) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
 
-  // Function to handle widget click to toggle pop-up visibility
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
   };
 
+  const closePopup = () => {
+    setPopupVisible(false);
+  };
+
+  const handleWidgetClick = (e: React.MouseEvent) => {
+    // Zapobiegaj wyświetleniu popupu, gdy klikniesz w checkbox lub przycisk 'x'
+    if ((e.target as HTMLElement).closest('input, button')) {
+      return; // Zatrzymaj propagację kliknięcia
+    }
+    togglePopup();
+  };
+
   return (
-    <div>
-      {/* Widget container (clickable) */}
+    <div className="flex justify-center items-center my-4">
+      {/* Widget as button */}
       <motion.div
-        className={`relative cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg shadow-lg ${
-          isWide ? 'w-1/2' : 'w-1/4'
-        } h-[50vh] flex flex-col justify-center items-center`}
-        onClick={togglePopup}
-        whileHover={{ scale: 1.05 }}
+        className="relative cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg min-w-[300px] min-h-[250px] flex flex-col justify-start items-center p-2"
+        onClick={handleWidgetClick}
+        whileHover={{ shadow: "shadow-lg" }}
         whileTap={{ scale: 0.95 }}
       >
-        {/* Widget Header */}
-        <div className="flex justify-center items-center w-full">
-          <h1 className="text-4xl text-white">{title}</h1>
-        </div>
-
-        {/* Content before pop-up */}
-        <div className="text-center mt-4">
-          {content_before_pop_up}
+        <div className="w-full flex flex-col items-center">
+          {contentWidget}
         </div>
       </motion.div>
 
       {/* Pop-up */}
       {isPopupVisible && (
         <>
-          {/* Full-screen background overlay */}
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 z-40"></div>
 
-          {/* Pop-up with animation */}
           <motion.div
             className="fixed inset-0 flex justify-center items-center z-50"
             initial={{ opacity: 0, scale: 0.8 }}
@@ -53,22 +53,22 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ isWide, title, content_before_p
             transition={{ duration: 0.5 }}
           >
             <motion.div
-              className="bg-white p-8 rounded-lg w-full max-w-3xl overflow-y-auto relative"
+              className="bg-commerzBrightGreen p-8 rounded-lg w-auto max-w-[90vw] max-h-[90vh] overflow-y-auto relative"
               initial={{ y: '100vh' }}
               animate={{ y: 0 }}
               exit={{ y: '100vh' }}
               transition={{ type: 'spring', stiffness: 200, damping: 30 }}
             >
-              {/* Content inside the pop-up */}
-              {content_after_pop_up}
-
-              {/* Close button */}
               <button
-                onClick={togglePopup}
-                className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600"
+                onClick={closePopup}
+                className="absolute top-0 right-0 w-30 h-30 text-commerzBlue p-2 flex items-center justify-center"
               >
-                X
+                <img src={closeIcon} alt="Close" className="w-6 h-6 ml-2" />
               </button>
+
+              <div className="flex flex-col justify-center items-center w-full">
+                {contentPopup}
+              </div>
             </motion.div>
           </motion.div>
         </>
