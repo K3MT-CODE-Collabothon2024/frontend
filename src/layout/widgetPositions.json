@@ -14,13 +14,6 @@
     "height": 2,
     "startPosition": 9
   },
-  "3": {
-    "content": "DueTasksWidgetWide",
-    "popup": "DueTasksWidgetPopup",
-    "width": 1,
-    "height": 1,
-    "startPosition": 1
-  },
   "0": {
     "content": "AddWidget",
     "popup": "AddWidgetPopup",
