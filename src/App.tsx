@@ -1,13 +1,12 @@
-import "./App.css";
-import logo from "./logo.svg";
-import Header from "./widgets/header";
+import React, { useState } from 'react';
+import './App.css';
 
 function App() {
   return (
     <div className="App">
-     <Header />
-     
+    
     </div>
+    
   );
 }
 

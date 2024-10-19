@@ -8,6 +8,8 @@ module.exports = {
       colors: {
         commerzYellow: '#FFE900',
         commerzBlue: '#00414B',
+        commerzBrightGreen: '#d1f1e5',
+        commerzLiteBrightGreen: '#d1f1e5',
       },
       fontFamily: {
         sans: ['Gotham', 'sans-serif'],  // Set Gotham as the default sans-serif
