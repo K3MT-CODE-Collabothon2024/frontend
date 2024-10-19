@@ -16,7 +16,7 @@
   },
   "3": {
     "content": "DueTasksWidgetWide",
-    "popup": "DueTasksWidgetPopup",
+    "popup": "DueTasksPopup",
     "width": 1,
     "height": 1,
     "startPosition": 1

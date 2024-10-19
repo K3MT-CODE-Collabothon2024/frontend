@@ -1,6 +1,27 @@
 import React from 'react';
 import Task from './Task'; // Importuj interfejs Task
-import deleteIcon from '../icons/delete_icon.png'; // Importuj ikonę
+import { useEffect, useState } from 'react';
+
+async function fetchTasksFromJSON(): Promise<Task[]> {
+  const response = await fetch('data/tasks.json');
+  const jsonData = await response.json();
+
+  // Mapujemy dane JSON na nasz interfejs Task
+  const tasks: Task[] = jsonData.map((task: any) => ({
+    id: Math.random(),  // Generujemy unikalne ID, bo JSON nie ma pola ID
+    description: task.description || task.title,  // Use `title` if `description` is missing
+    completed: task.state === 1,  // Mapping state (1 = completed, 0 = not completed)
+    priority: task.priority === 1 ? 'high' : task.priority === 2 ? 'medium' : 'low',
+    deadline: task.deadline ? new Date(task.deadline) : undefined,
+    category: task.category || 'General',  // Fallback for missing category
+    url: task.url || '',  // Fallback for missing URL
+  }));
+
+  console.log('Tasks fetched', tasks);
+  return tasks;
+}
+
+
 
 interface DueTasksWidgetWideProps {
   tasks: Task[];
@@ -23,14 +44,27 @@ const getPriorityColor = (priority: 'low' | 'medium' | 'high' | undefined, compl
   }
 };
 
+
+
 // Funkcja do formatowania daty na czytelny format
 const formatDate = (date: Date | undefined) => {
   if (!date) return 'N/A';
   return new Date(date).toLocaleDateString();
 };
 
-const DueTasksWidgetWide: React.FC<DueTasksWidgetWideProps> = ({ tasks, toggleComplete, removeTask }) => {
+const DueTasksWidgetWide: React.FC<DueTasksWidgetWideProps> = () => {
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+
+  // useEffect(() => {
+  //   // Pobieramy zadania po zamontowaniu komponentu
+  //   fetchTasksFromJSON().then(setTasks);
+  //   console.log('Tasks fetched');
+  //   console.log(tasks);
+  // }, []);
   // Sortowanie zadań po deadline
+
+  // console.log(tasks);
   const sortedTasks = [...tasks].sort((a, b) => {
     if (a.deadline && b.deadline) {
       return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
@@ -61,7 +95,7 @@ const DueTasksWidgetWide: React.FC<DueTasksWidgetWideProps> = ({ tasks, toggleCo
 
             {/* Task text */}
             <span className={`col-span-2 text-left ${task.completed ? 'line-through' : ''} text-lg`}>
-              {task.text}
+              {task.description}
             </span>
 
             {/* Task dates */}

@@ -1,109 +1,110 @@
-import React from 'react';
-import Task from './Task';
-import deleteIcon from '../icons/delete_icon.png'; // Importuj ikonę
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import Task from './Task';  // Ensure correct import path for Task interface
 
-interface DueTasksPopupProps {
-  tasks: Task[];
-  toggleComplete: (id: number) => void;
-  removeTask: (id: number) => void;
+// Fetch tasks from JSON
+async function fetchTasksFromJSON(): Promise<Task[]> {
+  console.log('Jest');
+  const response = await fetch('data/tasks.json');
+  const jsonData = await response.json();
+  console.log(response);
+  console.log('Tasks fetched', jsonData);
+
+  // Map JSON data to Task interface
+  return jsonData.map((task: any) => ({
+    id: Math.random(),  // Generate unique ID
+    description: task.description || task.title,  // Use title if description is missing
+    completed: task.state === 1,  // Map state (1 = completed, 0 = not completed)
+    priority: task.priority === 1 ? 'high' : task.priority === 2 ? 'medium' : 'low',
+    deadline: task.deadline ? new Date(task.deadline) : undefined,
+    category: task.category || 'General',  // Fallback for missing category
+    url: task.url || '',  // Fallback for missing URL
+  }));
 }
 
-// Funkcja zwracająca kolor w zależności od priorytetu
-const getPriorityColor = (priority: 'low' | 'medium' | 'high' | undefined, completed: boolean) => {
-  if (completed) return 'bg-gray-200 text-gray-500'; // Completed tasks get dimmed text
-  switch (priority) {
-    case 'high':
-      return 'bg-commerzYellow text-black'; // Keep strong contrast
-    case 'medium':
-      return 'bg-blue-400 text-white'; // Lighten blue for better contrast
-    case 'low':
-      return 'bg-green-100 text-gray-700'; // Light green with dark text
-    default:
-      return 'bg-gray-300';
-  }
-};
+interface DueTasksPopupProps {
+  tasks?: Task[];  // Make tasks prop optional
+}
 
-// Funkcja do formatowania daty na czytelny format
-const formatDate = (date: Date | undefined) => {
-  if (!date) return 'N/A';
-  return new Date(date).toLocaleDateString();
-};
+const DueTasksPopup: React.FC<DueTasksPopupProps> = ({ tasks: initialTasks }) => {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks || []); // Initialize with tasks prop or empty array
 
-const DueTasksPopup: React.FC<DueTasksPopupProps> = ({ tasks, toggleComplete, removeTask }) => {
-  // Sortowanie zadań po deadline
-  const sortedTasks = [...tasks].sort((a, b) => {
-    if (a.deadline && b.deadline) {
-      return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+  // useEffect(() => {
+  //   if (!initialTasks || initialTasks.length === 0) {
+  //     // Fetch tasks if no tasks are passed as props
+  //     fetchTasksFromJSON().then(setTasks).catch(console.error);
+  //   }
+  // }, [initialTasks]);
+
+  // Function to determine color based on priority
+  const getPriorityColor = (priority: Task['priority'], completed: boolean) => {
+    if (completed) return 'bg-gray-200 text-gray-500';  // Dim color for completed tasks
+    switch (priority) {
+      case 'high':
+        return 'bg-commerzYellow text-black';  // High priority - commerzYellow
+      case 'medium':
+        return 'bg-commerzBlue text-white';  // Medium priority - commerzBlue
+      case 'low':
+        return 'bg-commerzBrightGreen text-black';  // Low priority - commerzBrightGreen
+      default:
+        return 'bg-gray-300';  // No priority - gray
     }
-    return 0;
-  });
+  };
+
+  // Function to format dates
+  const formatDate = (date: Date | undefined) => (date ? new Date(date).toLocaleDateString() : 'N/A');
 
   return (
-    <div className="relative w-min-600 w-full h-min-600 h-full overflow-y-auto bg-transparent rounded-lg p-4">
-      {/* Header with Tasks title and Priority Legend */}
-      <div className="flex justify-between items-center mb-4">
-        {/* Tasks Title */}
-        <div className=' w-1/4'>
-        <h2 className="text-4xl font-extrabold   text-gray-800">Tasks</h2>
-        </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex items-center justify-center w-full h-full"
+    >
+      <div className="bg-white rounded-lg p-6 max-w-lg w-full h-3/4 overflow-y-auto">
+        <h2 className="text-xl font-bold mb-4">Tasks List</h2>
+
         {/* Priority Legend */}
-        <div>
-          <h2 className="text-lg font-semibold text-gray-800 text-center">Priority Legend</h2>
-          {/* Legend for color coding */}
-          <div className="flex justify-end space-x-4 mt-2">
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-commerzYellow mr-2"></div>
-              <span>High</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-blue-400 mr-2"></div>
-              <span>Medium</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-green-100 mr-2"></div>
-              <span>Low</span>
-            </div>
+        <div className="border-b pb-2 mb-2">
+          <div className="flex items-center">
+            <span className="bg-commerzYellow w-4 h-4 mr-2"></span>
+            <span className="text-sm">High Priority</span>
+          </div>
+          <div className="flex items-center">
+            <span className="bg-commerzBlue w-4 h-4 mr-2"></span>
+            <span className="text-sm">Medium Priority</span>
+          </div>
+          <div className="flex items-center">
+            <span className="bg-commerzBrightGreen w-4 h-4 mr-2"></span>
+            <span className="text-sm">Low Priority</span>
           </div>
         </div>
+
+        {/* Task List */}
+        <ul className="space-y-4">
+          {tasks.map(task => (
+            <li key={task.id} className={`p-4 border rounded-lg ${getPriorityColor(task.priority, task.completed)}`}>
+              <h3 className="font-semibold text-lg mb-1">{task.description}</h3>
+
+              <div className="flex justify-between text-sm">
+                <p>Category: {task.category}</p>
+                <p>Status: {task.completed ? 'Completed' : 'In Progress'}</p>
+              </div>
+
+              <div className="flex justify-between mt-2">
+                {task.deadline && <span className="text-xs">Deadline: {formatDate(task.deadline)}</span>}
+              </div>
+
+              {task.url && (
+                <a href={task.url} className="text-blue-200 underline text-xs mt-2 inline-block">
+                  View Task
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
-
-      {/* Task list */}
-      <ul className="space-y-4">
-        {sortedTasks.map((task) => (
-          <li
-            key={task.id}
-            className={`grid grid-cols-4 items-start ${getPriorityColor(task.priority, task.completed)} p-4 rounded relative shadow-md`}
-          >
-            {/* Task status */}
-            <span className="col-span-1 text-sm font-semibold text-left">
-              {task.completed ? "Completed" :  "To Do"}
-            </span>
-
-            {/* Task text */}
-            <span className={`col-span-2 text-left ${task.completed ? 'line-through' : ''} text-lg`}>
-              {task.text}
-            </span>
-
-            {/* Task dates */}
-            <div className="col-span-1 text-sm text-right text-gray-600">
-              <span>Deadline: {formatDate(task.deadline)}</span>
-            </div>
-
-            {/* Task category */}
-            <div className="col-span-1 text-sm text-left text-gray-600">
-              <span>Category: {task.category}</span>
-            </div>
-
-            {/* Remove button for completed tasks */}
-            {task.completed && (
-              <button onClick={() => removeTask(task.id)} className="absolute right-2 bottom-2 text-red-500">
-                <img src={deleteIcon} alt="Delete" className="w-6 h-6" />
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
+    </motion.div>
   );
 };
 
