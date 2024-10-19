@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import closeIcon from '../icons/close_icon.png';
 
 interface BaseWidgetProps {
   contentWidget: React.ReactNode;
@@ -17,17 +18,26 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget, contentPopup }) 
     setPopupVisible(false);
   };
 
+  const handleWidgetClick = (e: React.MouseEvent) => {
+    // Zapobiegaj wyświetleniu popupu, gdy klikniesz w checkbox lub przycisk 'x'
+    if ((e.target as HTMLElement).closest('input, button')) {
+      return; // Zatrzymaj propagację kliknięcia
+    }
+    togglePopup();
+  };
+
   return (
     <div className="flex justify-center items-center my-4">
-      {/* Widget jako przycisk */}
+      {/* Widget as button */}
       <motion.div
-        className={`relative cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg min-w-70
-        } min-w-[300px] min-h-[250px] flex flex-col justify-start items-center p-2`}  
-        onClick={togglePopup}
+
+        className="relative cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg min-w-[300px] min-h-[250px] flex flex-col justify-start items-center p-2"
+        onClick={handleWidgetClick}
+
         whileHover={{ shadow: "shadow-lg" }}
         whileTap={{ scale: 0.95 }}
       >
-        <div className="text-center mt-4 flex-grow w-full p-2  flex items-center justify-center">
+        <div className="w-full flex flex-col items-center">
           {contentWidget}
         </div>
       </motion.div>
@@ -45,19 +55,20 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget, contentPopup }) 
             transition={{ duration: 0.5 }}
           >
             <motion.div
+
               className="bg-commerzBrightGreen p-8 rounded-lg w-auto max-w-[90vw] max-h-[90vh] overflow-y-auto relative border-2 border-solid border-commerzBlue shadow-xl" 
+
               initial={{ y: '100vh' }}
               animate={{ y: 0 }}
               exit={{ y: '100vh' }}
               transition={{ type: 'spring', stiffness: 200, damping: 30 }}
             >
               <button
-  onClick={closePopup}
-  className="absolute top-2 right-2 w-8 h-8 text-white bg-red-500 p-2 rounded-full focus:outline-none flex items-center justify-center"
->
-  ×
-</button>
-
+                onClick={closePopup}
+                className="absolute top-0 right-0 w-30 h-30 text-commerzBlue p-2 flex items-center justify-center"
+              >
+                <img src={closeIcon} alt="Close" className="w-6 h-6 ml-2" />
+              </button>
 
               <div className="flex flex-col justify-center items-center w-full">
                 {contentPopup}
