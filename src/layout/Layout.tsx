@@ -80,6 +80,8 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
   const cols = { lg: numCols };
   const breakpoints = { lg: 100 };
 
+  const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number } | null>(null);
+
   const handleLayoutChange = (newLayout: RGLLayout[]) => {
     setLayout(newLayout); // Update layout state with new layout
 
@@ -137,6 +139,19 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
         preventCollision={false} // Allow overlap or swap
         isDraggable={true} // Enable dragging
         onLayoutChange={handleLayoutChange} // Handle layout changes
+        onDragStart={(layout, oldItem) => {
+          setDragStartPos({ x: oldItem.x, y: oldItem.y }); // Record the drag start position
+        }}
+        onDragStop={(layout, oldItem, newItem) => {
+          const distanceX = Math.abs(newItem.x - dragStartPos!.x);
+          const distanceY = Math.abs(newItem.y - dragStartPos!.y);
+
+          if (distanceX < 1 && distanceY < 1) {
+            openPopup(parseInt(newItem.i)); // Trigger openPopup if no significant movement
+          }
+
+          setDragStartPos(null); // Reset drag start position after drag ends
+        }}
       >
         {layout.map((item) => {
           const widget = WidgetPositions[parseInt(item.i)]; // Find the widget using its id
@@ -149,7 +164,6 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
             <div
               key={item.i}
               className="grid-item items-center justify-center w-full h-full rounded-3xl"
-              onClick={() => openPopup(parseInt(item.i))} // Open popup with the clicked widget ID
             >
               <BaseWidget
                 contentWidget={React.createElement(ContentComponent)}
