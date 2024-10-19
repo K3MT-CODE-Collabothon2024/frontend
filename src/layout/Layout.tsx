@@ -116,7 +116,7 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
     if (selectedWidgetId !== null) {
       const widget = WidgetPositions[selectedWidgetId];
       if (widget) {
-        const PopupContent = require(`./${widget.popup}`).default; // Dynamically import the popup content based on the widget
+        const PopupContent = require(`../widgets/${widget.popup}`).default; // Dynamically import the popup content based on the widget
         return <PopupContent />;
       }
     }
@@ -143,7 +143,7 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
 
           if (!widget) return null; // Check if the widget exists before rendering
 
-          const ContentComponent = require(`./${widget.content}`).default; // Dynamically import the component based on id
+          const ContentComponent = require(`../widgets/${widget.content}`).default; // Dynamically import the component based on id
 
           return (
             <div
