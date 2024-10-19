@@ -15,8 +15,8 @@
     "startPosition": 9
   },
   "3": {
-    "content": "DueTasksWidget/DueTasksWidgetTight",
-    "popup": "DueTasksWidget/DueTasksPopup",
+    "content": "MailWidget/MailWidgetTight",
+    "popup": "MailWidget/MailWidgetPopup",
     "width": 1,
     "height": 2,
     "startPosition": 1
