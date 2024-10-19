@@ -1,22 +1,22 @@
 {
 
   "1": {
-    "content": "AccountSummaryWidgetWide",
-    "popup": "AccountSummaryPopup",
-    "width": 2,
-    "height": 2,
+    "content": "AccountSummaryWidget/AccountSummaryWidgetWide",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "width": 4,
+    "height": 4,
     "startPosition": 7
   },
   "2": {
-    "content": "AccountSummaryWidgetTight",
-    "popup": "AccountSummaryPopup",
+    "content": "AccountSummaryWidget/AccountSummaryWidgetTight",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
     "width": 1,
     "height": 2,
     "startPosition": 9
   },
   "0": {
-    "content": "AddWidget",
-    "popup": "AddWidgetPopup",
+    "content": "AddWidget/AddWidget",
+    "popup": "AddWidget/AddWidgetPopup",
     "width": 1,
     "height": 2,
     "startPosition": 9
