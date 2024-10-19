@@ -25,19 +25,19 @@ const data: DataItem[] = [
 ];
 
 const previousData: DataItem[] = [
-  { amount: "120000.00", name: "AAPL", type: "Stock" },
-  { amount: "20000.00", name: "TSLA", type: "Stock" },
-  { amount: "9000.00", name: "AMZN", type: "Stock" },
-  { amount: "800.00", name: "USD", type: "Valutes" },
-  { amount: "600.00", name: "EUR", type: "Valutes" },
-  { amount: "180000.00", name: "JPY", type: "Valutes" },
-  { amount: "7000.00", name: "BTC", type: "Crypto" },
-  { amount: "1500.00", name: "ETH", type: "Crypto" },
-  { amount: "8000.00", name: "DOGE", type: "Crypto" },
-  { amount: "45000.00", name: "Credit Card A", type: "Creditcards" },
-  { amount: "15000.00", name: "Credit Card B", type: "Creditcards" },
-  { amount: "25000.00", name: "Loan", type: "Credits" },
-  { amount: "95000.00", name: "Savings Account", type: "Accounts" },
+  { amount: "150000.00", name: "AAPL", type: "Stock" },
+  { amount: "25000.00", name: "TSLA", type: "Stock" },
+  { amount: "10000.00", name: "AMZN", type: "Stock" },
+  { amount: "1000.00", name: "USD", type: "Valutes" },
+  { amount: "850.00", name: "EUR", type: "Valutes" },
+  { amount: "200000.00", name: "JPY", type: "Valutes" },
+  { amount: "8000.05", name: "BTC", type: "Crypto" },
+  { amount: "2000.00", name: "ETH", type: "Crypto" },
+  { amount: "10000.00", name: "DOGE", type: "Crypto" },
+  { amount: "50000.00", name: "Credit Card A", type: "Creditcards" },
+  { amount: "20000.00", name: "Credit Card B", type: "Creditcards" },
+  { amount: "30000.00", name: "Loan", type: "Credits" },
+  { amount: "100000.00", name: "Savings Account", type: "Accounts" },
 ];
 
 const AccountAssets: React.FC = () => {
@@ -93,15 +93,23 @@ const AccountAssets: React.FC = () => {
     }],
   };
 
+  // Określenie koloru tła w zależności od wartości wzrostu
+  const getBackgroundColor = (percentage: number) => {
+    if (percentage > 0) return 'bg-green-300'; // Jasnozielony
+    if (percentage === 0) return 'bg-gray-300'; // Szary
+    return 'bg-red-200'; // Jasnoczerwony
+  };
+
   return (
     <div className="flex">
       <div className="flex flex-col items-center">
+        <h2 className="text-xl font-bold mb-4">Product Balance</h2>
+        <div className={`mt-1 text-md font-bold border-4 border-black rounded-xl p-2 ${getBackgroundColor(growthPercentage)}`}>
+          <span>Monthly growth:</span>
+          <div className="font-mono">{growthPercentage.toFixed(2)}%</div>
+        </div>
         <Chart options={chartOptions} series={series} type="donut" width="400" />
         <div className="mt-2 text-md font-bold">{/* Miejsce na nazwę wykresu */}</div>
-        <div className="mt-1 text-md font-bold">
-          <span>Monthly growth:</span>
-          <div className="font-mono">{growthPercentage.toFixed(2)}%</div> 
-        </div>
       </div>
     </div>
   );
