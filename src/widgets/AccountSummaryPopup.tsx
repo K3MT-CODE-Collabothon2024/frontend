@@ -61,14 +61,18 @@ const chartData = {
   ],
 };
 
+// Opcje wykresu z grupowaniem słupków
 const options: ChartOptions<'bar'> = {
   responsive: true,
-  maintainAspectRatio: false,  // Wykres nie utrzyma proporcji, dostosuje się do kontenera
-  aspectRatio: 5,
-  
+  maintainAspectRatio: true,  // Wykres nie utrzyma proporcji, dostosuje się do kontenera
+  aspectRatio: 1.5,              // Określa stosunek szerokości do wysokości (opcjonalne)
   plugins: {
     legend: {
-      display: false,  // Wyłączenie legendy
+      position: 'right',  // Zmieniono pozycję legendy na prawą stronę
+      labels: {
+        usePointStyle: true, // Używa okrągłych symboli w legendzie
+        boxWidth: 20,        // Ustala rozmiar symboli w legendzie
+      },
     },
     tooltip: {
       callbacks: {
@@ -98,31 +102,12 @@ const AccountSummaryWidget = () => {
   const [isDarkBackground, setDarkBackground] = useState(false); // Stan do zarządzania ciemnym tłem
 
   return (
-    <>
-      {/* Tło, które będzie ciemniało po kliknięciu */}
-      {isDarkBackground && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50"></div>
-      )}
-
-      {/* Główny widget */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">Account Summary</h2>
         {/* Wykres wyświetlający dane */}
-        <div className="mb-6">
+        <div className="mb-6 w-[600px]">
           <Bar data={chartData} options={options} />
         </div>
       </div>
-
-      {/* Modal z powiększonym wykresem */}
-      {isModalOpen && (
-        <div className="fixed top-1/4 left-1/4 w-1/2 h-1/2 bg-white p-6 rounded-lg shadow-lg z-50">
-          <h2 className="text-2xl font-bold mb-4">Expanded Account Summary</h2>
-          <div className="mb-6">
-            <Bar data={chartData} options={options} />
-          </div>
-        </div>
-      )}
-    </>
   );
 };
 
