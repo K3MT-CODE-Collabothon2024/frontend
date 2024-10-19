@@ -10,7 +10,7 @@ import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import BaseWidget from "../widgets/BaseWidget";
 import closeIcon from "../icons/close_icon.png";
-import AddWidget from "../widgets/AddWidget";
+import AddWidget from "../widgets/AddWidget/AddWidget";
 
 // Wrap Responsive with WidthProvider for proper width handling
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -171,7 +171,7 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
               key={item.i}
               className="grid-item items-center justify-center w-full h-full rounded-3xl"
             >
-              {widget.content === "AddWidget" ? (
+              {widget.content === "AddWidget/AddWidget" ? (
                 <AddWidget />
               ) : (
                 <BaseWidget

@@ -1,6 +1,6 @@
 import React from 'react';
 import Task from './Task';
-import deleteIcon from '../icons/delete_icon.png'; // Importuj ikonę
+import deleteIcon from '../../icons/delete_icon.png'; // Importuj ikonę
 
 interface DueTasksPopupProps {
   tasks: Task[];
