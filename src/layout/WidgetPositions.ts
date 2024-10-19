@@ -1,4 +1,4 @@
-import WidgetPositionsData from './widgetPositions.json';
+import WidgetPositionsData from '../widgets/widgetPositions.json';
 
 interface Widget {
   content: string;

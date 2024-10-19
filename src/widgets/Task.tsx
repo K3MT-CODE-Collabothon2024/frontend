@@ -1,10 +1,11 @@
 interface Task {
     id: number;
     text: string;
+    // completed: 'toDo' | 'inProgress' | 'completed';
     completed: boolean;
     priority?: 'low' | 'medium' | 'high';
-    startDate?: Date;
     deadline?: Date;
+    category?: string;
   }
   
   export default Task;

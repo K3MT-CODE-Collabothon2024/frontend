@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import BaseWidget from "./widgets/BaseWidget";
-import MarketDataWidget from "./widgets/MarketData/MarketDataWidget";
+import MarketDataWidget from "./widgets/MarketDataWidget";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <BaseWidget contentWidget={<MarketDataWidget /> } contentPopup={<MarketDataWidget /> }/>
+    <App />
   </React.StrictMode>
 );
 

@@ -8,15 +8,22 @@
     "startPosition": 7
   },
   "2": {
+    "content": "MarketDataWidget",
+    "popup": "MarketDataWidget",
+    "width": 3,
+    "height": 3,
+    "startPosition": 7
+  },
+  "3": {
     "content": "AccountSummaryWidgetTight",
     "popup": "AccountSummaryPopup",
     "width": 1,
     "height": 2,
-    "startPosition": 9
+    "startPosition": 12
   },
   "0": {
     "content": "AddWidget",
-    "popup": "TestComponentPopup",
+    "popup": "AddWidgetPopup",
     "width": 1,
     "height": 2,
     "startPosition": 9

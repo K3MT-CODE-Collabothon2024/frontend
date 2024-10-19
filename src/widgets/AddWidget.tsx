@@ -11,23 +11,7 @@ const AddWidget: React.FC = () => {
   };
 
   const handleMouseUp = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // Calculate the distance moved
-    const distanceX = Math.abs(event.clientX - startPos.x);
-    const distanceY = Math.abs(event.clientY - startPos.y);
-
-    // Define a small threshold to differentiate between click and drag
-    const threshold = 5; // pixels
-
-    if (distanceX < threshold && distanceY < threshold) {
-      // If the movement is smaller than the threshold, consider it as a click
-      sayHello();
-    } else {
-      setIsDragging(true); // It's a drag, not a click
-    }
-  };
-
-  const sayHello = () => {
-    alert("Hello");
+    
   };
 
   return (
@@ -35,7 +19,7 @@ const AddWidget: React.FC = () => {
       <button
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
-        className="w-24 h-24 rounded-full font-bold text-4xl border-8 border-dashed border-blue-400 text-blue-400 flex items-center justify-center hover:bg-blue-600 transition-all transition-300"
+        className="w-24 h-24 rounded-full font-bold text-4xl border-8 border-dashed border-blue-400 text-blue-400 flex items-center justify-center"
       >
         +
       </button>
