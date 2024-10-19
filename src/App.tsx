@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
 import BaseWidget from './widgets/BaseWidget';
-
-import AccountSummaryWidget from './widgets/AccountSummary/AccountSummaryWidget';
-import AccountSummaryPopup from './widgets/AccountSummary/AccountSummaryPopup';
+import Task from './widgets/DueTasksWidget/Task';
+import DueTasksPopOut from './widgets/DueTasksWidget/DueTasksPopOut';
+import DueTasksWidgetTight from './widgets/DueTasksWidget/DueTasksWidgetTight';
+import DueTasksWidgetWide from './widgets/DueTasksWidget/DueTasksWidgetWide';
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([
@@ -31,12 +32,26 @@ function App() {
   return (
     <div className="App">
       <BaseWidget
-
-        contentWidget={ <AccountSummaryWidget/> }
-        contentPopup={ <AccountSummaryPopup/> }
+        contentWidget={
+          isWide ? (
+            <DueTasksWidgetWide tasks={tasks} toggleComplete={toggleComplete} removeTask={removeTask} />
+          ) : (
+            <DueTasksWidgetTight tasks={tasks} />
+          )
+        }
+        contentPopup={
+          <DueTasksPopOut tasks={tasks} toggleComplete={toggleComplete} removeTask={removeTask} />
+        }
       />
 
+      <button
+        onClick={() => setIsWide(!isWide)}
+        className="mt-4 p-2 bg-blue-500 text-white rounded"
+      >
+        Toggle Widget Width
+      </button>
     </div>
+    
   );
 }
 
