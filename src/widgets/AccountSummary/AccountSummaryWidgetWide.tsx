@@ -62,54 +62,36 @@ const chartData = {
 };
 
 const options: ChartOptions<'bar'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Summary of Accounts Over Time',
-        font: {
-          size: 18,
-          weight: 'bold',
-        },
-      },
-      legend: {
-        display: true,
-        onClick: (e, legendItem) => {
-          const index = legendItem.datasetIndex;
-          const chart = e.chart;
-          const meta = chart.getDatasetMeta(index);
-          meta.hidden = meta.hidden === null ? !chart.data.datasets[index].hidden : null;
-          chart.update();
-        },
-      },
-      tooltip: {
-        callbacks: {
-          label: (context) => {
-            return `${context.dataset.label}: ${context.raw} EUR`;
-          },
+  responsive: true,
+  maintainAspectRatio: false,  // Wykres nie utrzyma proporcji, dostosuje się do kontenera
+  aspectRatio: 5,
+  
+  plugins: {
+    legend: {
+      display: false,  // Wyłączenie legendy
+    },
+    tooltip: {
+      callbacks: {
+        label: (context) => {
+          return `${context.dataset.label}: ${context.raw} EUR`;  // Formatowanie tooltipa
         },
       },
     },
-    scales: {
-      x: {
-        beginAtZero: true,
-        stacked: false,
-        grid: {
-          display: false,
-        },
-      },
-      y: {
-        beginAtZero: true,
-        stacked: false,
-        ticks: {
-          callback: (value) => {
-            return `${value} EUR`;
-          },
-        },
+  },
+  scales: {
+    x: {
+      beginAtZero: true,  // Rozpoczynanie osi X od zera
+      stacked: false,    // Wyłączenie zgrupowania słupków w pionie
+      grid: {
+        display: false,  // Ukrywanie siatki na osi X
       },
     },
-  };
+    y: {
+      beginAtZero: true,  // Rozpoczynanie osi Y od zera
+      stacked: false,    // Włączenie osobnych słupków dla każdej kategorii
+    },
+  },
+};
 
 const AccountSummaryWidgetWide = () => {
   const [isModalOpen, setModalOpen] = useState(false); // Stan do obsługi otwarcia modalu
@@ -117,17 +99,15 @@ const AccountSummaryWidgetWide = () => {
 
   return (
     <>
-    {/* Główny widget */}
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Account Summary</h2>
-      {/* Wykres wyświetlający dane */}
-      <div className="mb-6 w-full"> {/* Ustawienie pełnej szerokości */}
-        <div className="w-full md:w-[1200px]"> {/* Ustawienie większej szerokości na większych ekranach */}
+      {/* Główny widget */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Account Summary</h2>
+        {/* Wykres wyświetlający dane */}
+        <div className="mb-6">
           <Bar data={chartData} options={options} />
         </div>
       </div>
-    </div>
-  </>
+    </>
   );
 };
 
