@@ -8,58 +8,79 @@ interface DueTasksWidgetWideProps {
   removeTask: (id: number) => void;
 }
 
+// Funkcja zwracająca kolor w zależności od priorytetu
+const getPriorityColor = (priority: 'low' | 'medium' | 'high' | undefined, completed: boolean) => {
+  if (completed) return 'bg-gray-200 text-gray-500'; // Completed tasks get dimmed text
+  switch (priority) {
+    case 'high':
+      return 'bg-commerzYellow text-black'; // Mocny kontrast dla wysokiego priorytetu
+    case 'medium':
+      return 'bg-blue-400 text-white'; // Średni kontrast dla medium
+    case 'low':
+      return 'bg-green-100 text-gray-700'; // Łagodny dla niskiego priorytetu
+    default:
+      return 'bg-gray-300';
+  }
+};
+
+// Funkcja do formatowania daty na czytelny format
+const formatDate = (date: Date | undefined) => {
+  if (!date) return 'N/A';
+  return new Date(date).toLocaleDateString();
+};
+
 const DueTasksWidgetWide: React.FC<DueTasksWidgetWideProps> = ({ tasks, toggleComplete, removeTask }) => {
+  // Sortowanie zadań po deadline
+  const sortedTasks = [...tasks].sort((a, b) => {
+    if (a.deadline && b.deadline) {
+      return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+    }
+    return 0;
+  });
+
   return (
-    <div className="w-full p-4">
-      <h2 className="text-center text-xl font-bold mb-4">Your Tasks</h2>
-      <ul className="space-y-2">
-        {tasks.slice(0, 3).map(task => (
+    <div className="flex flex-col w-full p-4 bg-transparent rounded-lg">
+      {/* Header with Tasks title */}
+      <div className="flex justify-between items-center mb-4">
+        {/* Tasks Title */}
+        <h2 className="text-3xl font-bold text-gray-800 p-2">Your Tasks</h2>
+      </div>
+
+      {/* Task list */}
+      <ul className="space-y-4">
+        {sortedTasks.slice(0, 3).map((task) => (
           <li
             key={task.id}
-            className={`flex justify-between items-center p-2 rounded ${
-              task.completed ? 'line-through' : ''
-            } ${getPriorityColor(task.priority)}`}
+            className={`grid grid-cols-4 items-start ${getPriorityColor(task.priority, task.completed)} p-4 rounded relative shadow-md`}
           >
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => toggleComplete(task.id)}
-                className="form-checkbox h-5 w-5 text-commerzYellow"
-              />
-              <span className="ml-2">{task.text}</span>
+            {/* Task status */}
+            <span className="col-span-1 text-sm font-semibold text-left">
+              {task.completed ? "Completed" : task.priority === 'high' ? "In Progress" : "To Do"}
+            </span>
+
+            {/* Task text */}
+            <span className={`col-span-2 text-left ${task.completed ? 'line-through' : ''} text-lg`}>
+              {task.text}
+            </span>
+
+            {/* Task dates */}
+            <div className="col-span-1 text-sm text-right text-gray-600">
+              <span>Deadline: {formatDate(task.deadline)}</span>
             </div>
 
-            {/* Przycisk usuwania pojawi się tylko jeśli task jest completed */}
-            {task.completed && (
-              <button onClick={() => removeTask(task.id)} className="ml-4">
-                <div className="w-6 h-6 bg-transparent rounded-full flex items-center justify-center">
-                  <img src={deleteIcon} alt="Delete" className="w-4 h-4" />
-                </div>
-              </button>
-            )}
+            {/* Task category */}
+            <div className="col-span-1 text-sm text-left text-gray-600">
+              <span>Category: {task.category}</span>
+            </div>
+
           </li>
         ))}
       </ul>
 
-      {/* Pokaż trzy kropki, jeśli jest więcej niż 5 zadań */}
-      {tasks.length > 3 && <div className="text-center mt-4">...</div>}
+      {/* Show ellipsis if more than 3 tasks */}
+      {tasks.length > 3 && <div className="text-center mt-4 text-gray-600">...</div>}
     </div>
   );
-};
-
-// Funkcja, która zwraca kolor tła w zależności od priorytetu
-const getPriorityColor = (priority?: 'low' | 'medium' | 'high') => {
-  switch (priority) {
-    case 'high':
-      return 'bg-red-200';
-    case 'medium':
-      return 'bg-yellow-200';
-    case 'low':
-      return 'bg-green-200';
-    default:
-      return 'bg-gray-200';
-  }
 };
 
 export default DueTasksWidgetWide;

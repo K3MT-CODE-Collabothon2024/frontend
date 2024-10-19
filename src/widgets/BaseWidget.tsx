@@ -56,7 +56,7 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget, contentPopup }) 
           >
             <motion.div
 
-              className="bg-commerzBrightGreen p-8 rounded-lg w-auto max-w-[90vw] max-h-[90vh] overflow-y-auto relative border-2 border-solid border-commerzBlue shadow-xl" 
+              className="bg-commerzBrightGreen p-8 rounded-lg max-w-[300w] w-full max-h-[600w] h-full overflow-y-auto relative shadow-xl" 
 
               initial={{ y: '100vh' }}
               animate={{ y: 0 }}
