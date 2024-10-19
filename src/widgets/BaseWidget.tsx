@@ -22,14 +22,13 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ isWide, contentWidget, contentP
     <div className="flex justify-center items-center my-4">
       {/* Widget jako przycisk */}
       <motion.div
-        className={`relative cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg ${
-          isWide ? 'w-full md:w-2/3' : 'w-full md:w-1/3'
+        className={`relative cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg min-w-70
         } min-w-[300px] min-h-[250px] flex flex-col justify-center items-center`}  
         onClick={togglePopup}
         whileHover={{ shadow: "shadow-lg" }}
         whileTap={{ scale: 0.95 }}
       >
-        <div className="text-center mt-4 flex-grow w-full p-2 overflow-hidden flex items-center justify-center">
+        <div className="text-center mt-4 flex-grow w-full p-2  flex items-center justify-center">
           {contentWidget}
         </div>
       </motion.div>
@@ -54,11 +53,12 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ isWide, contentWidget, contentP
               transition={{ type: 'spring', stiffness: 200, damping: 30 }}
             >
               <button
-                onClick={closePopup}
-                className="absolute top-2 right-2 text-white bg-red-500 p-2 rounded-full focus:outline-none"
-              >
-                ×
-              </button>
+  onClick={closePopup}
+  className="absolute top-2 right-2 w-8 h-8 text-white bg-red-500 p-2 rounded-full focus:outline-none flex items-center justify-center"
+>
+  ×
+</button>
+
 
               <div className="flex flex-col justify-center items-center w-full">
                 {contentPopup}
