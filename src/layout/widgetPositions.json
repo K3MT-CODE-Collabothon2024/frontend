@@ -1,29 +1,29 @@
 {
 
   "1": {
-    "content": "AccountSummaryWidgetWide",
-    "popup": "AccountSummaryPopup",
-    "width": 2,
+    "content": "AccountSummaryWidget/AccountSummaryWidgetWide",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "width": 1,
     "height": 2,
     "startPosition": 7
   },
   "2": {
-    "content": "AccountSummaryWidgetTight",
-    "popup": "AccountSummaryPopup",
+    "content": "AccountSummaryWidget/AccountSummaryWidgetTight",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
     "width": 1,
     "height": 2,
     "startPosition": 9
   },
   "3": {
-    "content": "DueTasksWidgetWide",
-    "popup": "DueTasksPopup",
+    "content": "DueTasksWidget/DueTasksWidgetTight",
+    "popup": "DueTasksWidget/DueTasksPopup",
     "width": 1,
-    "height": 1,
+    "height": 2,
     "startPosition": 1
   },
   "0": {
-    "content": "AddWidget",
-    "popup": "TestComponentPopup",
+    "content": "AddWidget/AddWidget",
+    "popup": "AddWidget/AddWidgetPopup",
     "width": 1,
     "height": 2,
     "startPosition": 9

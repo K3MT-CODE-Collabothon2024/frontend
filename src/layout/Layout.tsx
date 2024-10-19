@@ -9,6 +9,8 @@ import WidgetPositions from "./WidgetPositions"; // Import WidgetPositions
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import BaseWidget from "../widgets/BaseWidget";
+import closeIcon from "../icons/close_icon.png";
+import AddWidget from "../widgets/AddWidget/AddWidget";
 
 // Wrap Responsive with WidthProvider for proper width handling
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -80,7 +82,10 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
   const cols = { lg: numCols };
   const breakpoints = { lg: 100 };
 
-  const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number } | null>(null);
+  const [dragStartPos, setDragStartPos] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   const handleLayoutChange = (newLayout: RGLLayout[]) => {
     setLayout(newLayout); // Update layout state with new layout
@@ -132,7 +137,7 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
         layouts={{ lg: layout }} // Layout configuration for large screens
         breakpoints={breakpoints} // Breakpoints for responsive design
         cols={cols} // Number of columns per screen size
-        rowHeight={100} // Row height in pixels
+        rowHeight={130} // Row height in pixels
         margin={[15, 15]} // Margin around each item (in pixels)
         isResizable={false} // Disable resizing
         compactType={"vertical"} // Disable compactType
@@ -158,42 +163,57 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
 
           if (!widget) return null; // Check if the widget exists before rendering
 
-          const ContentComponent = require(`../widgets/${widget.content}`).default; // Dynamically import the component based on id
+          const ContentComponent =
+            require(`../widgets/${widget.content}`).default; // Dynamically import the component based on id
 
           return (
             <div
               key={item.i}
               className="grid-item items-center justify-center w-full h-full rounded-3xl"
             >
-              <BaseWidget
-                contentWidget={React.createElement(ContentComponent)}
-              />
+              {widget.content === "AddWidget/AddWidget" ? (
+                <AddWidget />
+              ) : (
+                <BaseWidget
+                  contentWidget={React.createElement(ContentComponent)}
+                />
+              )}
             </div>
           );
         })}
       </ResponsiveGridLayout>
 
       {isPopupOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Background Overlay */}
-          <div className="absolute inset-0 bg-gray-300 bg-opacity-75 z-40"></div>
+        <>
+          <div className="fixed inset-0 bg-gray-300 bg-opacity-75 z-40"></div>
 
-          {/* Popup Container */}
-          <div className="relative bg-white w-[80%] h-[80%] rounded-lg shadow-lg overflow-hidden z-50">
-            {/* Close Button */}
-            <button
-              onClick={closePopup}
-              className="absolute top-4 right-4 w-8 h-8 text-white bg-red-500 rounded-full focus:outline-none flex items-center justify-center"
+          <motion.div
+            className="fixed inset-0 flex justify-center items-center z-50"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.div
+              className="bg-commerzBrightGreen p-8 rounded-lg w-11/12 h-4/5 overflow-y-auto relative shadow-xl"
+              initial={{ y: "100vh" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100vh" }}
+              transition={{ type: "spring", stiffness: 200, damping: 30 }}
             >
-              ×
-            </button>
+              <button
+                onClick={closePopup}
+                className="absolute top-0 right-0 w-30 h-30 text-commerzBlue p-2 flex items-center justify-center"
+              >
+                <img src={closeIcon} alt="Close" className="w-6 h-6 ml-2" />
+              </button>
 
-            {/* Popup Content */}
-            <div className="flex flex-col justify-center items-center h-full p-4 overflow-auto">
-              {renderPopupContent()}
-            </div>
-          </div>
-        </div>
+              <div className="flex justify-center items-center h-full w-full ">
+                {renderPopupContent()}
+              </div>
+            </motion.div>
+          </motion.div>
+        </>
       )}
     </>
   );

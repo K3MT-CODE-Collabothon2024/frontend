@@ -103,13 +103,15 @@ const options: ChartOptions<"bar"> = {
 };
 
 const AccountSummaryWidgetTight = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isDarkBackground, setDarkBackground] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false); // Stan do obsługi otwarcia modalu
+  const [isDarkBackground, setDarkBackground] = useState(false); // Stan do zarządzania ciemnym tłem
 
   return (
     <>
+      {/* Główny widget */}
       <div className="h-full w-11/12">
         <h2 className="text-2xl font-bold mb-4">Account Summary</h2>
+        {/* Wykres wyświetlający dane */}
         <div className="mb-6">
           <Bar data={chartData} options={options} />
         </div>

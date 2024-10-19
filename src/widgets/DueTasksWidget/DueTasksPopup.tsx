@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Task from "./Task"; // Ensure correct import path for Task interface
 
-type TaskFetch = {
+export type TaskFetch = {
   priority: number;
   description: string;
   deadline: string;
@@ -16,7 +16,6 @@ type TaskFetch = {
 async function fetchTasksFromJSON(): Promise<Task[]> {
   const response = await fetch("http://localhost:8080/tasks/1");
   const jsonData = await response.json();
-  console.log(jsonData);
 
   // Map JSON data to Task interface
   return jsonData.map((task: any) => ({
@@ -70,7 +69,7 @@ const DueTasksPopup: React.FC<DueTasksPopupProps> = ({
       exit={{ opacity: 0 }}
       className="flex items-center justify-center w-full h-full"
     >
-      <div className="bg-white rounded-lg p-6 max-w-lg w-full h-3/4 overflow-y-auto">
+      <div className="bg-white rounded-lg p-6 max-w-4xl w-full h-3/4 overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Tasks List</h2>
 
         {/* Priority Legend */}
