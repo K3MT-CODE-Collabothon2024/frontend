@@ -1,6 +1,6 @@
 import React from 'react';
 import Task from './Task'; // Importuj interfejs Task
-import deleteIcon from '../../icons/delete_icon.png'; // Importuj ikonę
+import deleteIcon from '../icons/delete_icon.png'; // Importuj ikonę
 
 interface DueTasksWidgetWideProps {
   tasks: Task[];
