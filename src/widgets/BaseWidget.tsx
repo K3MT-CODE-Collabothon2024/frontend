@@ -30,8 +30,10 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget, contentPopup }) 
     <div className="flex justify-center items-center my-4">
       {/* Widget as button */}
       <motion.div
+
         className="relative cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg min-w-[300px] min-h-[250px] flex flex-col justify-start items-center p-2"
         onClick={handleWidgetClick}
+
         whileHover={{ shadow: "shadow-lg" }}
         whileTap={{ scale: 0.95 }}
       >
@@ -43,7 +45,7 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget, contentPopup }) 
       {/* Pop-up */}
       {isPopupVisible && (
         <>
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 z-40"></div>
+          <div className="fixed inset-0 bg-gray-300 bg-opacity-75 z-40"></div>
 
           <motion.div
             className="fixed inset-0 flex justify-center items-center z-50"
@@ -53,7 +55,9 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget, contentPopup }) 
             transition={{ duration: 0.5 }}
           >
             <motion.div
-              className="bg-commerzBrightGreen p-8 rounded-lg w-auto max-w-[90vw] max-h-[90vh] overflow-y-auto relative"
+
+              className="bg-commerzBrightGreen p-8 rounded-lg w-auto max-w-[90vw] max-h-[90vh] overflow-y-auto relative border-2 border-solid border-commerzBlue shadow-xl" 
+
               initial={{ y: '100vh' }}
               animate={{ y: 0 }}
               exit={{ y: '100vh' }}
