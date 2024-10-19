@@ -8,10 +8,10 @@ interface BaseWidgetProps {
 
 const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget }) => {
   return (
-    <div className="flex justify-center items-center w-full h-full">
+    <div className="flex justify-center items-center w-full h-full border-4 border-commerzBlue rounded-lg">
       {/* Widget as a button */}
       <motion.div
-        className={`relative w-full h-full cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg min-w-[300px] min-h-[250px] flex flex-col justify-start items-center`}
+        className={`w-full h-full cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg  flex flex-col justify-start items-center`}
         whileHover={{ shadow: "shadow-lg" }}
         whileTap={{ scale: 0.95 }}
       >

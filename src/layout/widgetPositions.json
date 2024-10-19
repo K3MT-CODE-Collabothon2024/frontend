@@ -16,7 +16,7 @@
   },
   "0": {
     "content": "AddWidget",
-    "popup": "TestComponentPopup",
+    "popup": "AddWidgetPopup",
     "width": 1,
     "height": 2,
     "startPosition": 9

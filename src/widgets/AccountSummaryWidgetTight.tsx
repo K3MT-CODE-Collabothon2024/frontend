@@ -100,7 +100,7 @@ const AccountSummaryWidgetTight = () => {
   return (
     <>
       {/* Główny widget */}
-      <div>
+      <div className='h-full w-11/12'>
         <h2 className="text-2xl font-bold mb-4">Account Summary</h2>
         {/* Wykres wyświetlający dane */}
         <div className="mb-6">
