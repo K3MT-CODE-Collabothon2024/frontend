@@ -1,0 +1,44 @@
+{
+  "0": {
+    "content": "TestComponent",
+    "popup": "TestComponentPopup",
+    "width": 2,
+    "height": 2,
+    "startPosition": 1
+  },
+  "1": {
+    "content": "TestComponentCompressed",
+    "popup": "TestComponentPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 5
+  },
+  "2": {
+    "content": "TestBigComponent",
+    "popup": "TestComponentPopup",
+    "width": 2,
+    "height": 4,
+    "startPosition": 3
+  },
+  "3": {
+    "content": "AccountSummaryWidgetWide",
+    "popup": "AccountSummaryPopup",
+    "width": 2,
+    "height": 2,
+    "startPosition": 7
+  },
+  "4": {
+    "content": "AccountSummaryWidgetTight",
+    "popup": "AccountSummaryPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 9
+  },
+  "5": {
+    "content": "AddWidget",
+    "popup": "TestComponentPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 9
+  }
+}
