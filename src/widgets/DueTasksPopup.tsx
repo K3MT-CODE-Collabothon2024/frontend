@@ -1,58 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import Task from './Task';  // Ensure correct import path for Task interface
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import Task from "./Task"; // Ensure correct import path for Task interface
+
+type TaskFetch = {
+  priority: number;
+  description: string;
+  deadline: string;
+  category: string;
+  url: string;
+  state: string;
+  title: string;
+};
 
 // Fetch tasks from JSON
 async function fetchTasksFromJSON(): Promise<Task[]> {
-  console.log('Jest');
-  const response = await fetch('data/tasks.json');
+  const response = await fetch("http://localhost:8080/tasks/1");
   const jsonData = await response.json();
-  console.log(response);
-  console.log('Tasks fetched', jsonData);
+  console.log(jsonData);
 
   // Map JSON data to Task interface
   return jsonData.map((task: any) => ({
-    id: Math.random(),  // Generate unique ID
-    description: task.description || task.title,  // Use title if description is missing
-    completed: task.state === 1,  // Map state (1 = completed, 0 = not completed)
-    priority: task.priority === 1 ? 'high' : task.priority === 2 ? 'medium' : 'low',
+    description: task.description || task.title,
+    completed: task.state === 1,
+    priority:
+      task.priority === 1 ? "high" : task.priority === 2 ? "medium" : "low",
     deadline: task.deadline ? new Date(task.deadline) : undefined,
-    category: task.category || 'General',  // Fallback for missing category
-    url: task.url || '',  // Fallback for missing URL
+    category: task.category || "General",
+    url: task.url || "",
   }));
 }
 
 interface DueTasksPopupProps {
-  tasks?: Task[];  // Make tasks prop optional
+  tasks?: Task[]; // Make tasks prop optional
 }
 
-const DueTasksPopup: React.FC<DueTasksPopupProps> = ({ tasks: initialTasks }) => {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks || []); // Initialize with tasks prop or empty array
+const DueTasksPopup: React.FC<DueTasksPopupProps> = ({
+  tasks: initialTasks,
+}) => {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks || []);
 
-  // useEffect(() => {
-  //   if (!initialTasks || initialTasks.length === 0) {
-  //     // Fetch tasks if no tasks are passed as props
-  //     fetchTasksFromJSON().then(setTasks).catch(console.error);
-  //   }
-  // }, [initialTasks]);
+  useEffect(() => {
+    if (!initialTasks || initialTasks.length === 0) {
+      fetchTasksFromJSON().then(setTasks).catch(console.error);
+    }
+  }, [initialTasks]);
 
-  // Function to determine color based on priority
-  const getPriorityColor = (priority: Task['priority'], completed: boolean) => {
-    if (completed) return 'bg-gray-200 text-gray-500';  // Dim color for completed tasks
+  const getPriorityColor = (priority: Task["priority"], completed: boolean) => {
+    if (completed) return "bg-gray-200 text-gray-500"; // Dim color for completed tasks
     switch (priority) {
-      case 'high':
-        return 'bg-commerzYellow text-black';  // High priority - commerzYellow
-      case 'medium':
-        return 'bg-commerzBlue text-white';  // Medium priority - commerzBlue
-      case 'low':
-        return 'bg-commerzBrightGreen text-black';  // Low priority - commerzBrightGreen
+      case "high":
+        return "bg-commerzYellow text-black"; // High priority - commerzYellow
+      case "medium":
+        return "bg-commerzBlue text-white"; // Medium priority - commerzBlue
+      case "low":
+        return "bg-commerzBrightGreen text-black"; // Low priority - commerzBrightGreen
       default:
-        return 'bg-gray-300';  // No priority - gray
+        return "bg-gray-300"; // No priority - gray
     }
   };
 
   // Function to format dates
-  const formatDate = (date: Date | undefined) => (date ? new Date(date).toLocaleDateString() : 'N/A');
+  const formatDate = (date: Date | undefined) =>
+    date ? new Date(date).toLocaleDateString() : "N/A";
 
   return (
     <motion.div
@@ -82,21 +91,34 @@ const DueTasksPopup: React.FC<DueTasksPopupProps> = ({ tasks: initialTasks }) =>
 
         {/* Task List */}
         <ul className="space-y-4">
-          {tasks.map(task => (
-            <li key={task.id} className={`p-4 border rounded-lg ${getPriorityColor(task.priority, task.completed)}`}>
+          {tasks.map((task) => (
+            <li
+              key={task.id}
+              className={`p-4 border rounded-lg ${getPriorityColor(
+                task.priority,
+                task.completed
+              )}`}
+            >
               <h3 className="font-semibold text-lg mb-1">{task.description}</h3>
 
               <div className="flex justify-between text-sm">
                 <p>Category: {task.category}</p>
-                <p>Status: {task.completed ? 'Completed' : 'In Progress'}</p>
+                <p>Status: {task.completed ? "Completed" : "In Progress"}</p>
               </div>
 
               <div className="flex justify-between mt-2">
-                {task.deadline && <span className="text-xs">Deadline: {formatDate(task.deadline)}</span>}
+                {task.deadline && (
+                  <span className="text-xs">
+                    Deadline: {formatDate(task.deadline)}
+                  </span>
+                )}
               </div>
 
               {task.url && (
-                <a href={task.url} className="text-blue-200 underline text-xs mt-2 inline-block">
+                <a
+                  href={task.url}
+                  className="text-blue-200 underline text-xs mt-2 inline-block"
+                >
                   View Task
                 </a>
               )}
