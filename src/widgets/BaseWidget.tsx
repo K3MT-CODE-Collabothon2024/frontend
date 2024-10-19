@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface BaseWidgetProps {
-  isWide: boolean;
   contentWidget: React.ReactNode;
   contentPopup: React.ReactNode;
 }
 
-const BaseWidget: React.FC<BaseWidgetProps> = ({ isWide, contentWidget, contentPopup }) => {
+const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget, contentPopup }) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
 
   const togglePopup = () => {

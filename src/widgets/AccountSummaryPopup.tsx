@@ -97,7 +97,7 @@ const options: ChartOptions<'bar'> = {
   },
 };
 
-const AccountSummaryWidget = () => {
+const AccountSummaryPopup = () => {
   const [isModalOpen, setModalOpen] = useState(false); // Stan do obsługi otwarcia modalu
   const [isDarkBackground, setDarkBackground] = useState(false); // Stan do zarządzania ciemnym tłem
 
@@ -111,4 +111,4 @@ const AccountSummaryWidget = () => {
   );
 };
 
-export default AccountSummaryWidget;
+export default AccountSummaryPopup;
