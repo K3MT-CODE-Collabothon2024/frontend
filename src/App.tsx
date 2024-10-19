@@ -7,7 +7,6 @@ import AccountAssets from './widgets/AccountSummaryWidget/AccountAssets';
 function App() {
   return (
     <div className="App">
-      <BaseWidget contentWidget={<AccountAssets/>}/>
     </div>
   );
 }
