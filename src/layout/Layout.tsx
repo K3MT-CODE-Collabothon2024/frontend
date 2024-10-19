@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Responsive,
   WidthProvider,
@@ -183,38 +183,40 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
         })}
       </ResponsiveGridLayout>
 
-      {isPopupOpen && (
-        <>
-          <div className="fixed inset-0 bg-gray-300 bg-opacity-75 z-40"></div>
+      <AnimatePresence>
+        {isPopupOpen && (
+          <>
+            <div className="fixed inset-0 bg-gray-300 bg-opacity-75 z-40"></div>
 
-          <motion.div
-            className="fixed inset-0 flex justify-center items-center z-50"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.5 }}
-          >
             <motion.div
-              className="bg-commerzBrightGreen p-8 rounded-lg w-11/12 h-4/5 overflow-y-auto relative shadow-xl"
-              initial={{ y: "100vh" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100vh" }}
-              transition={{ type: "spring", stiffness: 200, damping: 30 }}
+              className="fixed inset-0 flex justify-center items-center z-50"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.5 }}
             >
-              <button
-                onClick={closePopup}
-                className="absolute top-0 right-0 w-30 h-30 text-commerzBlue p-2 flex items-center justify-center"
+              <motion.div
+                className="bg-commerzBrightGreen p-8 rounded-lg w-11/12 h-4/5 overflow-y-auto relative shadow-xl"
+                initial={{ y: "100vh" }}
+                animate={{ y: 0 }}
+                exit={{ y: "100vh" }}
+                transition={{ type: "spring", stiffness: 200, damping: 30 }}
               >
-                <img src={closeIcon} alt="Close" className="w-6 h-6 ml-2" />
-              </button>
+                <button
+                  onClick={closePopup}
+                  className="absolute top-0 right-0 w-30 h-30 text-commerzBlue p-2 flex items-center justify-center"
+                >
+                  <img src={closeIcon} alt="Close" className="w-6 h-6 ml-2" />
+                </button>
 
-              <div className="flex justify-center items-center h-full w-full ">
-                {renderPopupContent()}
-              </div>
+                <div className="flex justify-center items-center h-full w-full ">
+                  {renderPopupContent()}
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        </>
-      )}
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };
