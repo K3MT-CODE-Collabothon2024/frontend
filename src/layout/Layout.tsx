@@ -1,5 +1,6 @@
 import React from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
+import WidgetPositions from "./WidgetPositions"; // Import WidgetWidths
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
@@ -7,54 +8,62 @@ import "react-resizable/css/styles.css";
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 interface LayoutProps {
-  children: React.ReactNode[];
+  ids: number[]; // Accept ids as an array of numbers
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-  // Define how many items per row based on the screen width
-  const itemsPerRow = 4; // Change this as needed
+const Layout: React.FC<LayoutProps> = ({ ids }) => {
+  // Define the layout based on WidgetWidths and ids
+  const layout = ids.map((id) => {
+    const widget = WidgetPositions[id]; // Get the widget data for each id
+    if (!widget) return null; // Return null if widget is not found
+  
+    const index = widget.startPosition - 1; // Convert to 0-based index for calculations
+    const x = (index % 5); // Assuming 5 columns
+    const y = Math.floor(index / 5); // Calculate row based on index
+  
+    return {
+      i: id.toString(), // Unique key for each grid item
+      x, // Use calculated x position
+      y, // Use calculated y position
+      w: widget.width, // Use the widget width
+      h: widget.height, // Use the widget height
+    };
+  });
 
-  // Define the layout for all screen sizes
-  const layout = children.map((_, index) => ({
-    i: index.toString(), // Unique key for each grid item
-    x: (index % itemsPerRow) * 3, // Position on x-axis
-    y: Math.floor(index / itemsPerRow), // Position on y-axis
-    w: 2, // Width (in grid units)
-    h: 2, // Height (in grid units)
-    minH: 2,
-    minW: 2, // Minimum width (in grid units)
-    maxW: 4, // Maximum width (in grid units)
-    maxH: 2, // Maximum height (in grid units)
-  }));
+  const filteredLayout = layout.filter((item): item is NonNullable<typeof item> => item !== null); // Filter out null values
 
-  // Define the number of columns for different screen sizes
-  const cols = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
+  const cols = { lg: 5, md: 10, sm: 6, xs: 4, xxs: 2 };
 
-  // Define breakpoints for screen sizes
   const breakpoints = { lg: 1000, md: 996, sm: 768, xs: 480, xxs: 0 };
 
   return (
     <ResponsiveGridLayout
       className="layout h-full bg-slate-600"
-      layouts={{ lg: layout }} // Layout configuration for large screens (can define for other breakpoints too)
+      layouts={{ lg: filteredLayout }} // Layout configuration for large screens
       breakpoints={breakpoints} // Breakpoints for responsive design
       cols={cols} // Number of columns per screen size
-      rowHeight={150} // Row height in pixels
-      width={window.innerWidth * 0.2} // Total width of the grid layout (80% of the screen width)
+      rowHeight={100} // Row height in pixels
       margin={[10, 10]} // Margin around each item (in pixels)
-      isResizable={true} // Enable resizing
+      isResizable={false} // Disable resizing
       compactType={"vertical"} // Disable compactType
-      preventCollision={false} // Prevent collisions
-      maxRows={itemsPerRow}
+      preventCollision={false} // Allow overlap or swap
     >
-      {children.map((child, index) => (
-        <div
-          key={index}
-          className="grid-item items-center justify-center w-full h-full overflow-hidden rounded-3xl"
-        >
-          {child}
-        </div>
-      ))}
+      {filteredLayout.map((item) => {
+        const widget = WidgetPositions[parseInt(item.i)]; // Find the widget using its id
+
+        if (!widget) return null; // Check if the widget exists before rendering
+
+        const Component = require(`./${widget.id}`).default; // Dynamically import the component based on id
+
+        return (
+          <div
+            key={item.i}
+            className="grid-item items-center justify-center w-full h-full overflow-hidden rounded-3xl"
+          >
+            <Component /> {/* Render the component */}
+          </div>
+        );
+      })}
     </ResponsiveGridLayout>
   );
 };

@@ -11,7 +11,7 @@ const getRandomColor = () => {
 
 
 
-const TestComponent: React.FC = () => {
+const TestComponentCompressed: React.FC = () => {
     const [bgColor, setBgColor] = useState<string>('');
 
     useEffect(() => {
@@ -25,11 +25,11 @@ const TestComponent: React.FC = () => {
         >
             <div className="w-full h-full bg-white rounded-3xl flex items-center justify-center">
                 <h1 className="text-2xl font-bold text-gray-800">
-                TestComponent
+                    TestComponentCompressedProps
                 </h1>
             </div>
         </div>
     );
 };
 
-export default TestComponent;
+export default TestComponentCompressed;
