@@ -33,8 +33,6 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget, contentPopup }) 
 
         className="relative cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg min-w-[300px] min-h-[250px] flex flex-col justify-start items-center p-2"
         onClick={handleWidgetClick}
-
-        whileHover={{ shadow: "shadow-lg" }}
         whileTap={{ scale: 0.95 }}
       >
         <div className="w-full flex flex-col items-center">
@@ -56,7 +54,7 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget, contentPopup }) 
           >
             <motion.div
 
-              className="bg-commerzBrightGreen p-8 rounded-lg w-auto max-w-[90vw] max-h-[90vh] overflow-y-auto relative border-2 border-solid border-commerzBlue shadow-xl" 
+              className="bg-commerzBrightGreen p-8 rounded-lg w-auto max-w-[90vw] max-h-[90vh] overflow-y-auto relative border-2 border-solid border-commerzBlue" 
 
               initial={{ y: '100vh' }}
               animate={{ y: 0 }}
