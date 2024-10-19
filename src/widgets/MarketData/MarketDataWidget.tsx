@@ -1,32 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import Slider from 'react-slick';
+import ChartComponent from './ChartComponent';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import './MarketDataWidget.css'; // Import custom CSS
 
-const MarketData = () => {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
+const MarketDataWidget: React.FC = () => {
+    const tickers = ['META', 'AAPL', 'GOOGL', 'AMZN']; // Add more tickers as needed
 
-    useEffect(() => {
-        fetch('http://127.0.0.1:5000/api/stock/META?period=1y&interval=1mo')
-            .then(response => response.json())
-            .then(data => {
-                setData(data);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                setLoading(false);
-            });
-    }, []);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    };
 
     return (
-        <div>
-            <h1>Stock Data</h1>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+        <div className="market-data-widget">
+            <h1>Market Data</h1>
+            <Slider {...settings}>
+                {tickers.map(ticker => (
+                    <div key={ticker}>
+                        <ChartComponent ticker={ticker} />
+                    </div>
+                ))}
+            </Slider>
         </div>
     );
 };
 
-export default MarketData;
+export default MarketDataWidget;

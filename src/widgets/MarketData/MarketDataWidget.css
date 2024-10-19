@@ -1,0 +1,9 @@
+.market-data-widget {
+    max-width: 600px; /* Adjust the width as needed */
+    margin: 0 auto;
+}
+
+.market-data-widget h1 {
+    font-size: 1.5em;
+    text-align: center;
+}
