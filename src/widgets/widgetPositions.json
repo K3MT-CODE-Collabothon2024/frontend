@@ -21,6 +21,8 @@
     "height": 2,
     "startPosition": 12
   },
+    "startPosition": 9
+  },
   "0": {
     "content": "AddWidget",
     "popup": "AddWidgetPopup",
