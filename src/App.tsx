@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import './App.css';
 import BaseWidget from './widgets/BaseWidget';
-import AccountSummaryWidget from './widgets/AccountSummary/AccountSummaryWidget';
+import AccountSummaryWidgetTight from './widgets/AccountSummary/AccountSummaryWidgetTight';
 import AccountSummaryPopup from './widgets/AccountSummary/AccountSummaryPopup';
-
+import AccountSummaryWidgetWide from './widgets/AccountSummary/AccountSummaryWidgetWide';
 function App() {
   return (
     <div className="App">
       <BaseWidget
-        contentWidget={ <AccountSummaryWidget/> }
+        contentWidget={ <AccountSummaryWidgetWide/> }
         contentPopup={ <AccountSummaryPopup/> }
       />
     </div>
