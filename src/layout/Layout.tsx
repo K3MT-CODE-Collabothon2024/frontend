@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Responsive,
@@ -12,14 +12,12 @@ import BaseWidget from "../widgets/BaseWidget";
 import closeIcon from "../icons/close_icon.png";
 import AddWidget from "../widgets/AddWidget/AddWidget";
 
-// Wrap Responsive with WidthProvider for proper width handling
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 interface LayoutProps {
-  ids: number[]; // Accept ids as an array of numbers
+  ids: number[];
 }
 
-// Define the structure of the updated positions object
 interface UpdatedPositions {
   [key: number]: {
     content: string;
@@ -31,162 +29,171 @@ interface UpdatedPositions {
 }
 
 const Layout: React.FC<LayoutProps> = ({ ids }) => {
-  const numCols = 4; // Number of columns in the grid
-  const [indexes, setIndexes] = useState<number[]>([]); // State to hold the widget IDs
-  const [isPopupOpen, setIsPopupOpen] = useState(false); // Popup control
-  const [selectedWidgetId, setSelectedWidgetId] = useState<number | null>(null); // State to hold the ID of the clicked widget
-  const [layout, setLayout] = useState<RGLLayout[]>([]); // Initialize layout state
+  const numCols = 4;
+  const [indexes, setIndexes] = useState<number[]>([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedWidgetId, setSelectedWidgetId] = useState<number | null>(null);
+  const [layout, setLayout] = useState<RGLLayout[]>([]);
+  const [draggingWidgetId, setDraggingWidgetId] = useState<number | null>(null);
+  const [showDeleteArea, setShowDeleteArea] = useState(false);
+  const [dragging, setDragging] = useState(false); // New state to track dragging
+
+  const deleteBoxRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Save ids to local storage if they don't already exist
-    const existingIds = JSON.parse(
-      localStorage.getItem("widgetIds") || "[]"
-    ) as number[];
-    console.log("Existing widget IDs in local storage:");
-    console.log(existingIds);
-    if (existingIds.length === 0) {
-      localStorage.setItem("widgetPositions", JSON.stringify(WidgetPositions));
-      localStorage.setItem("widgetIds", JSON.stringify(ids));
-      console.log("Saved widget IDs to local storage:", ids);
-    }
-    setIndexes(ids);
-  }, [ids]);
-
-  const [dragStartPos, setDragStartPos] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
-
-  useEffect(() => {
-    // Load widget IDs from local storage
     const existingIds = JSON.parse(
       localStorage.getItem("widgetIds") || "[]"
     ) as number[];
     if (existingIds.length > 0) {
-      setIndexes(existingIds); // Set the widget IDs if they exist
+      setIndexes(existingIds);
     } else {
-      setIndexes(ids); // Otherwise, set from props
-      localStorage.setItem("widgetIds", JSON.stringify(ids)); // Save ids to local storage
+      setIndexes(ids);
+      localStorage.setItem("widgetIds", JSON.stringify(ids));
     }
 
-    // Load widget positions from local storage
     const savedPositions = localStorage.getItem("widgetPositions");
     const parsedPositions = savedPositions ? JSON.parse(savedPositions) : {};
 
     const newLayout = existingIds
       .map((id) => {
-        const widget = parsedPositions[id] || WidgetPositions[id]; // Fallback to default if not found
+        const widget = parsedPositions[id] || WidgetPositions[id];
         if (!widget) return null;
 
-        const index = widget.startPosition - 1; // Convert to 0-based index
-        const x = index % numCols; // Calculate x position
-        const y = Math.floor(index / numCols); // Calculate y position
+        const index = widget.startPosition - 1;
+        const x = index % numCols;
+        const y = Math.floor(index / numCols);
 
         return {
-          i: id.toString(), // Unique key for each grid item
-          x, // Use calculated x position
-          y, // Use calculated y position
-          w: widget.width, // Use the widget width
-          h: widget.height, // Use the widget height
+          i: id.toString(),
+          x,
+          y,
+          w: widget.width,
+          h: widget.height,
         };
       })
       .filter((item): item is NonNullable<typeof item> => item !== null);
 
-    setLayout(newLayout); // Update layout state
-  }, []); // Run only once on mount
+    setLayout(newLayout);
+  }, []);
 
   const handleLayoutChange = (newLayout: RGLLayout[]) => {
-    // Update layout state with new layout
-
-    // Retrieve existing positions from local storage
-    const savedPositions = localStorage.getItem("widgetPositions");
-    const parsedPositions = savedPositions ? JSON.parse(savedPositions) : {};
-
-    // Create an object to hold updated positions
-    const updatedPositions: UpdatedPositions = { ...parsedPositions }; // Start with existing positions
+    const updatedPositions: UpdatedPositions = {};
 
     newLayout.forEach((item) => {
-      console.log(item);
       const widgetId = parseInt(item.i);
-      const widget = WidgetPositions[widgetId]; // Get the widget using its id
+      const widget = WidgetPositions[widgetId];
 
       if (widget) {
-        // Update the startPosition based on the new index
-        const newStartPosition = item.y * numCols + item.x + 1; // 1-based index
+        const newStartPosition = item.y * numCols + item.x + 1;
         updatedPositions[widgetId] = {
-          ...widget, // Preserve other properties
-          startPosition: newStartPosition, // Update only startPosition
+          ...widget,
+          startPosition: newStartPosition,
         };
       }
-      setLayout(newLayout);
     });
 
-    // Save updated positions to localStorage
     localStorage.setItem("widgetPositions", JSON.stringify(updatedPositions));
+    setLayout(newLayout);
   };
 
   const openPopup = (widgetId: number) => {
-    setSelectedWidgetId(widgetId); // Set the selected widget ID
-    setIsPopupOpen(true); // Open the popup
+    if (!dragging) {
+      setSelectedWidgetId(widgetId);
+      setIsPopupOpen(true);
+    }
   };
 
   const closePopup = () => {
-    setIsPopupOpen(false); // Function to close the popup
-    setSelectedWidgetId(null); // Reset the selected widget ID
+    setIsPopupOpen(false);
+    setSelectedWidgetId(null);
   };
 
-  // Dynamically import the popup content based on the selected widget ID
+  const onDragStart = (layout: RGLLayout[], oldItem: any) => {
+    setDragging(true); // Set dragging to true when drag starts
+    setDraggingWidgetId(parseInt(oldItem.i));
+    setShowDeleteArea(true);
+  };
+
+  const onDragStop = (layout: RGLLayout[], oldItem: any, newItem: any) => {
+    setShowDeleteArea(false);
+    setDraggingWidgetId(null);
+
+    setTimeout(() => {
+      setDragging(false); // Set dragging to false after a small delay
+    }, 100); // 100ms delay to avoid onClick firing immediately after drag
+
+    // Handle deletion logic
+    if (deleteBoxRef.current) {
+      const deleteBoxRect = deleteBoxRef.current.getBoundingClientRect();
+      const widgetElement = document.querySelector(
+        `.react-grid-item[data-grid-id="${oldItem.i}"]`
+      );
+
+      if (widgetElement) {
+        const widgetRect = widgetElement.getBoundingClientRect();
+
+        const isOverDeleteBox =
+          widgetRect.left < deleteBoxRect.right &&
+          widgetRect.right > deleteBoxRect.left &&
+          widgetRect.top < deleteBoxRect.bottom &&
+          widgetRect.bottom > deleteBoxRect.top;
+
+        if (isOverDeleteBox) {
+          deleteWidget(draggingWidgetId!);
+        }
+      }
+    }
+  };
+
+  const deleteWidget = (widgetId: number) => {
+    setIndexes((prevIndexes) => prevIndexes.filter((id) => id !== widgetId));
+    console.log(`Deleted widget with id ${widgetId}`);
+    console.log("Indexes:", indexes);
+   
+  };
+
   const renderPopupContent = () => {
     if (selectedWidgetId !== null) {
       const widget = WidgetPositions[selectedWidgetId];
       if (widget) {
-        const PopupContent = require(`../widgets/${widget.popup}`).default; // Dynamically import the popup content based on the widget
+        const PopupContent = require(`../widgets/${widget.popup}`).default;
         return <PopupContent />;
       }
     }
-    return null; // Return null if no content is available
+    return null;
   };
 
   return (
     <>
       <ResponsiveGridLayout
         className="layout h-full"
-        layouts={{ lg: layout }} // Layout configuration for large screens
-        breakpoints={{ lg: 100 }} // Breakpoints for responsive design
-        cols={{ lg: numCols }} // Number of columns per screen size
-        rowHeight={130} // Row height in pixels
-        margin={[15, 15]} // Margin around each item (in pixels)
-        isResizable={false} // Disable resizing
-        compactType={"vertical"} // Disable compactType
-        preventCollision={false} // Allow overlap or swap
-        isDraggable={true} // Enable dragging
-        onLayoutChange={handleLayoutChange} // Handle layout changes
-        onDragStart={(layout, oldItem) => {
-          setDragStartPos({ x: oldItem.x, y: oldItem.y }); // Record the drag start position
-        }}
-        onDragStop={(layout, oldItem, newItem) => {
-          const distanceX = Math.abs(newItem.x - dragStartPos!.x);
-          const distanceY = Math.abs(newItem.y - dragStartPos!.y);
-
-          if (distanceX < 1 && distanceY < 1) {
-            openPopup(parseInt(newItem.i)); // Trigger openPopup if no significant movement
-          }
-
-          setDragStartPos(null); // Reset drag start position after drag ends
-        }}
+        layouts={{ lg: layout }}
+        breakpoints={{ lg: 100 }}
+        cols={{ lg: numCols }}
+        rowHeight={130}
+        margin={[15, 15]}
+        isResizable={false}
+        compactType={"vertical"}
+        preventCollision={false}
+        isDraggable={true}
+        onLayoutChange={handleLayoutChange}
+        onDragStart={onDragStart}
+        onDragStop={onDragStop}
       >
         {layout.map((item) => {
-          const widget = WidgetPositions[parseInt(item.i)]; // Find the widget using its id
+          const widget = WidgetPositions[parseInt(item.i)];
 
-          if (!widget) return null; // Check if the widget exists before rendering
+          if (!widget) return null;
 
           const ContentComponent =
-            require(`../widgets/${widget.content}`).default; // Dynamically import the component based on id
+            require(`../widgets/${widget.content}`).default;
 
           return (
             <div
               key={item.i}
               className="grid-item items-center justify-center w-full h-full rounded-3xl"
+              data-grid-id={item.i}
+              onClick={() => openPopup(parseInt(item.i))}
             >
               {widget.content === "AddWidget/AddWidget" ? (
                 <AddWidget />
@@ -199,7 +206,25 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
           );
         })}
       </ResponsiveGridLayout>
-
+      <AnimatePresence>
+        {showDeleteArea && (
+          <motion.div
+            ref={deleteBoxRef}
+            className="fixed top-10 left-1/2 transform -translate-x-1/2 w-20 h-20 rounded-full bg-red-500 flex items-center justify-center shadow-lg"
+            initial={{ opacity: 0, scale: 0.5, y: -50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: -50 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 20,
+              duration: 0.5,
+            }}
+          >
+            <span className="text-white text-xl">Delete</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {isPopupOpen && (
           <>
