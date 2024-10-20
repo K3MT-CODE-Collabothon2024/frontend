@@ -93,11 +93,14 @@ const options: ChartOptions<'bar'> = {
   },
 };
 
-const AccountSummaryWidgetWide = () => {
+const AccountSummaryWidget = () => {
+  const [isModalOpen, setModalOpen] = useState(false); // Stan do obsługi otwarcia modalu
+  const [isDarkBackground, setDarkBackground] = useState(false); // Stan do zarządzania ciemnym tłem
+
   return (
     <>
       {/* Główny widget */}
-      <div className='w-11/12 h-full'>
+      <div>
         <h2 className="text-2xl font-bold mb-4">Account Summary</h2>
         {/* Wykres wyświetlający dane */}
         <div className="mb-6">
@@ -108,4 +111,4 @@ const AccountSummaryWidgetWide = () => {
   );
 };
 
-export default AccountSummaryWidgetWide;
+export default AccountSummaryWidget;

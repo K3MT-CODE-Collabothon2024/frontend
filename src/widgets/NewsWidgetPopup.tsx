@@ -30,3 +30,4 @@ const NewsWidgetPopup: React.FC<NewsWidgetPopupProps> = ({ news, closePopup }) =
 };
 
 export default NewsWidgetPopup;
+
