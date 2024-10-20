@@ -10,12 +10,10 @@ const AddWidget: React.FC = () => {
     setIsDragging(false); // Reset dragging state
   };
 
-  const handleMouseUp = (event: React.MouseEvent<HTMLButtonElement>) => {
-    
-  };
+  const handleMouseUp = (event: React.MouseEvent<HTMLButtonElement>) => {};
 
   return (
-    <div className="w-full h-full bg-transparent border-8 border-dashed border-blue-400 rounded-3xl flex items-center justify-center text-white hover:scale-105 transition-all transition-300">
+    <div className="w-full h-full bg-transparent border-8 border-dashed border-blue-400 rounded-3xl flex items-center justify-center text-white hover:scale-105 transition-all transition-300 add-widget-tour">
       <button
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}

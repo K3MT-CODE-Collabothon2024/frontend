@@ -33,7 +33,7 @@ const MailWidgetPopup: React.FC = () => {
       <h2 className="text-3xl font-bold mb-4">Mails</h2>
       <p className="mb-4">Mails we recently sent to you.</p>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-300 text-lg">
+        <table className="min-w-full bg-white border border-gray-300 text-lg mail-widget-popup-tour">
           <thead>
             <tr>
               <th className="px-6 py-4 border-b">Date</th>

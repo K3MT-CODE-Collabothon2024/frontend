@@ -11,6 +11,8 @@ import "react-resizable/css/styles.css";
 import BaseWidget from "../widgets/BaseWidget";
 import closeIcon from "../icons/close_icon.png";
 import AddWidget from "../widgets/AddWidget/AddWidget";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 // Wrap Responsive with WidthProvider for proper width handling
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -32,6 +34,10 @@ interface UpdatedPositions {
 
 const Layout: React.FC<LayoutProps> = ({ ids }) => {
   const numCols = 4; // Number of columns in the grid
+  const isTutorialOn = useSelector(
+    (state: RootState) => state.tutorial.isTutorialOn
+  );
+
   const [isPopupOpen, setIsPopupOpen] = useState(false); // Popup control
   const [selectedWidgetId, setSelectedWidgetId] = useState<number | null>(null); // State to hold the ID of the clicked widget
   const [layout, setLayout] = useState<RGLLayout[]>(() => {
