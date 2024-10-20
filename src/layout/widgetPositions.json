@@ -20,5 +20,12 @@
     "width": 1,
     "height": 2,
     "startPosition": 9
+  },
+  "3":{
+    "content": "NewsWidget",
+    "popup": "NewsWidgetPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 9
   }
 }
