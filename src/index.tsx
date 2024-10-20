@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import BaseWidget from "./widgets/BaseWidget";
+import MarketDataWidget from "./widgets/MarketData/MarketDataWidgetTight";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

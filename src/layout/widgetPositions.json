@@ -1,0 +1,63 @@
+{
+
+  "1": {
+    "content": "AccountSummaryWidget/AccountSummaryWidgetWide",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "width": 2,
+    "height": 2,
+    "startPosition": 1
+  },
+  "2": {
+    "content": "MarketData/MarketDataWidgetWide",
+    "popup": "MarketData/MarketDataWidgetPopup",
+    "width": 2,
+    "height": 4,
+    "startPosition": 13
+  },
+  "3": {
+    "content": "MarketData/MarketDataWidgetTight",
+    "popup": "MarketData/MarketDataWidgetPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 1
+  },
+  "4": {
+    "content": "AccountSummaryWidget/AccountSummaryWidgetTight",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "title": "Account Summary Tight",
+    "width": 1,
+    "height": 2,
+    "startPosition": 3
+  },
+  "5": {
+    "content": "DueTasksWidget/DueTasksWidgetTight",
+    "popup": "DueTasksWidget/DueTasksPopup",
+    "title": "Due Tasks Tight",
+    "width": 1,
+    "height": 2,
+    "startPosition": 4
+  },
+  "6": {
+    "content": "DueTasksWidget/DueTasksWidgetWide",
+    "popup": "DueTasksWidget/DueTasksPopup",
+    "title": "Due Tasks Wide",
+    "width": 3,
+    "height": 2,
+    "startPosition": 10
+  },
+  "7": {
+    "content": "MailWidget/MailWidgetTight",
+    "popup": "MailWidget/MailWidgetPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 20
+  },
+  "0": {
+    "content": "AddWidget/AddWidget",
+    "popup": "AddWidget/AddWidgetPopup",
+    "title": "Add Widget",
+    "width": 1,
+    "height": 2,
+    "startPosition": 16
+  }
+}

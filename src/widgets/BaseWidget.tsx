@@ -1,3 +1,5 @@
+
+
 import React from "react";
 import { motion } from "framer-motion";
 
@@ -23,3 +25,4 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget }) => {
 };
 
 export default BaseWidget;
+
