@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Responsive,
   WidthProvider,
   Layout as RGLLayout,
 } from "react-grid-layout";
-import WidgetPositions from "./WidgetPositions"; // Import WidgetPositions
+import WidgetPositions from "./WidgetPositions";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import BaseWidget from "../widgets/BaseWidget";
@@ -32,36 +32,50 @@ interface UpdatedPositions {
 
 const Layout: React.FC<LayoutProps> = ({ ids }) => {
   const numCols = 4; // Number of columns in the grid
+  const [indexes, setIndexes] = useState<number[]>([]); // State to hold the widget IDs
   const [isPopupOpen, setIsPopupOpen] = useState(false); // Popup control
   const [selectedWidgetId, setSelectedWidgetId] = useState<number | null>(null); // State to hold the ID of the clicked widget
-  const [layout, setLayout] = useState<RGLLayout[]>(() => {
-    const savedPositions = localStorage.getItem("widgetPositions");
-    if (savedPositions) {
-      const parsedPositions = JSON.parse(savedPositions);
-      return ids
-        .map((id) => {
-          const widget = parsedPositions[id] || WidgetPositions[id]; // Use saved positions or fallback to defaults
-          if (!widget) return null;
+  const [layout, setLayout] = useState<RGLLayout[]>([]); // Initialize layout state
 
-          const index = widget.startPosition - 1; // Convert to 0-based index
-          const x = index % numCols; // Calculate x position
-          const y = Math.floor(index / numCols); // Calculate y position
+  useEffect(() => {
+    // Save ids to local storage if they don't already exist
+    const existingIds = JSON.parse(
+      localStorage.getItem("widgetIds") || "[]"
+    ) as number[];
+    console.log("Existing widget IDs in local storage:");
+    console.log(existingIds);
+    if (existingIds.length === 0) {
+      localStorage.setItem("widgetPositions", JSON.stringify(WidgetPositions));
+      localStorage.setItem("widgetIds", JSON.stringify(ids));
+      console.log("Saved widget IDs to local storage:", ids);
+    }
+    setIndexes(ids);
+  }, [ids]);
 
-          return {
-            i: id.toString(), // Unique key for each grid item
-            x, // Use calculated x position
-            y, // Use calculated y position
-            w: widget.width, // Use the widget width
-            h: widget.height, // Use the widget height
-          };
-        })
-        .filter((item): item is NonNullable<typeof item> => item !== null); // Filter out null values
+  const [dragStartPos, setDragStartPos] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  useEffect(() => {
+    // Load widget IDs from local storage
+    const existingIds = JSON.parse(
+      localStorage.getItem("widgetIds") || "[]"
+    ) as number[];
+    if (existingIds.length > 0) {
+      setIndexes(existingIds); // Set the widget IDs if they exist
+    } else {
+      setIndexes(ids); // Otherwise, set from props
+      localStorage.setItem("widgetIds", JSON.stringify(ids)); // Save ids to local storage
     }
 
-    // Fallback to default positions if no saved positions
-    return ids
+    // Load widget positions from local storage
+    const savedPositions = localStorage.getItem("widgetPositions");
+    const parsedPositions = savedPositions ? JSON.parse(savedPositions) : {};
+
+    const newLayout = existingIds
       .map((id) => {
-        const widget = WidgetPositions[id];
+        const widget = parsedPositions[id] || WidgetPositions[id]; // Fallback to default if not found
         if (!widget) return null;
 
         const index = widget.startPosition - 1; // Convert to 0-based index
@@ -76,32 +90,35 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
           h: widget.height, // Use the widget height
         };
       })
-      .filter((item): item is NonNullable<typeof item> => item !== null); // Filter out null values
-  });
+      .filter((item): item is NonNullable<typeof item> => item !== null);
 
-  const cols = { lg: numCols };
-  const breakpoints = { lg: 100 };
-
-  const [dragStartPos, setDragStartPos] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
+    setLayout(newLayout); // Update layout state
+  }, []); // Run only once on mount
 
   const handleLayoutChange = (newLayout: RGLLayout[]) => {
-    setLayout(newLayout); // Update layout state with new layout
+    // Update layout state with new layout
+
+    // Retrieve existing positions from local storage
+    const savedPositions = localStorage.getItem("widgetPositions");
+    const parsedPositions = savedPositions ? JSON.parse(savedPositions) : {};
 
     // Create an object to hold updated positions
-    const updatedPositions: UpdatedPositions = {};
+    const updatedPositions: UpdatedPositions = { ...parsedPositions }; // Start with existing positions
 
     newLayout.forEach((item) => {
+      console.log(item);
       const widgetId = parseInt(item.i);
       const widget = WidgetPositions[widgetId]; // Get the widget using its id
 
       if (widget) {
         // Update the startPosition based on the new index
-        widget.startPosition = item.y * numCols + item.x + 1; // 1-based index
-        updatedPositions[widgetId] = widget; // Store updated position
+        const newStartPosition = item.y * numCols + item.x + 1; // 1-based index
+        updatedPositions[widgetId] = {
+          ...widget, // Preserve other properties
+          startPosition: newStartPosition, // Update only startPosition
+        };
       }
+      setLayout(newLayout);
     });
 
     // Save updated positions to localStorage
@@ -135,8 +152,8 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
       <ResponsiveGridLayout
         className="layout h-full"
         layouts={{ lg: layout }} // Layout configuration for large screens
-        breakpoints={breakpoints} // Breakpoints for responsive design
-        cols={cols} // Number of columns per screen size
+        breakpoints={{ lg: 100 }} // Breakpoints for responsive design
+        cols={{ lg: numCols }} // Number of columns per screen size
         rowHeight={130} // Row height in pixels
         margin={[15, 15]} // Margin around each item (in pixels)
         isResizable={false} // Disable resizing
@@ -183,38 +200,40 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
         })}
       </ResponsiveGridLayout>
 
-      {isPopupOpen && (
-        <>
-          <div className="fixed inset-0 bg-gray-300 bg-opacity-75 z-40"></div>
+      <AnimatePresence>
+        {isPopupOpen && (
+          <>
+            <div className="fixed inset-0 bg-gray-300 bg-opacity-75 z-40"></div>
 
-          <motion.div
-            className="fixed inset-0 flex justify-center items-center z-50"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.5 }}
-          >
             <motion.div
-              className="bg-commerzBrightGreen p-8 rounded-lg w-11/12 h-4/5 overflow-y-auto relative shadow-xl"
-              initial={{ y: "100vh" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100vh" }}
-              transition={{ type: "spring", stiffness: 200, damping: 30 }}
+              className="fixed inset-0 flex justify-center items-center z-50"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.5 }}
             >
-              <button
-                onClick={closePopup}
-                className="absolute top-0 right-0 w-30 h-30 text-commerzBlue p-2 flex items-center justify-center"
+              <motion.div
+                className="bg-commerzBrightGreen p-8 rounded-lg w-11/12 h-4/5 overflow-y-auto relative shadow-xl"
+                initial={{ y: "100vh" }}
+                animate={{ y: 0 }}
+                exit={{ y: "100vh" }}
+                transition={{ type: "spring", stiffness: 200, damping: 30 }}
               >
-                <img src={closeIcon} alt="Close" className="w-6 h-6 ml-2" />
-              </button>
+                <button
+                  onClick={closePopup}
+                  className="absolute top-0 right-0 w-30 h-30 text-commerzBlue p-2 flex items-center justify-center"
+                >
+                  <img src={closeIcon} alt="Close" className="w-6 h-6 ml-2" />
+                </button>
 
-              <div className="flex justify-center items-center h-full w-full ">
-                {renderPopupContent()}
-              </div>
+                <div className="flex justify-center items-center h-full w-full ">
+                  {renderPopupContent()}
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        </>
-      )}
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };
