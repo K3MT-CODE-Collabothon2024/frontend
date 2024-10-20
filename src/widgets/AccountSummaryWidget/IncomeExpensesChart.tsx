@@ -94,7 +94,7 @@ const IncomeExpensesChart: React.FC = () => {
   };
 
   return (
-      <div className="container mx-auto p-4">
+      <div className="h-full p-4 overflow-hidden">
         <div className="flex flex-col items-center mb-4">
           <h1 className="text-2xl font-bold mb-2 text-commerzBlue">Income and Expenses</h1>
           <div className="flex space-x-4 ">

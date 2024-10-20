@@ -59,11 +59,47 @@
     "height": 2,
     "startPosition": 6
   },
+  "9": {
+    "content": "MailWidget/MailWidgetTight",
+    "popup": "MailWidget/MailWidgetPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 20
+  },
+  "10": {
+    "content": "AccountSummaryWidget/AccountAssets",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "title": "Account Assets",
+    "width": 2,
+    "height": 4,
+    "startPosition": 6
+  },
+  "11": {
+    "content": "AccountSummaryWidget/AccountAssetsSmaller",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 20
+  },
+  "12":{
+    "content": "AccountSummaryWidget/IncomeExpensesChart",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "width": 4,
+    "height": 2,
+    "startPosition": 6
+  },
+  "13":{
+    "content": "AccountSummaryWidget/IncomeExpensesChartSmaller",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 6
+  },
   "0": {
     "content": "AddWidget/AddWidget",
     "popup": "AddWidget/AddWidgetPopup",
     "title": "Add Widget",
-    "width": 1,
+    "width": 1, 
     "height": 2,
     "startPosition": 9
   }

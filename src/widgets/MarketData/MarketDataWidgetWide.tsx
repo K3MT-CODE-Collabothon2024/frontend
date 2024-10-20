@@ -21,7 +21,7 @@ const MarketDataWidget: React.FC = () => {
     };
 
     return (
-        <div className="w-full h-full flex flex-col items-center justify-center">
+        <div className="w-full h-full flex flex-col items-center justify-center overflow-hidden">
             <Slider {...settings} className="w-full h-full flex items-center justify-center">
                 {tickers.map(ticker => (
                     <div key={ticker} className="flex items-center justify-center w-11/12 h-full">

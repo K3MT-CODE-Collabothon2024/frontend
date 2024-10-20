@@ -118,7 +118,7 @@ const AccountAssets: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="h-full p-4 overflow-hidden">
             <div className="flex items-center mb-4">
                 <h2 className="text-xl font-bold">{selectedType}</h2>
                 <span

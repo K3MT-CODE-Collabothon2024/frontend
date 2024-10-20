@@ -59,7 +59,7 @@ const MarketDataWidgetTight: React.FC = () => {
     };
 
     return (
-        <div className="w-full h-full flex flex-col items-center justify-center">
+        <div className="w-full h-full flex flex-col items-center justify-center overflow-hidden">
             {loading ? (
                 <div className="w-full h-full flex items-center justify-center">
                     <Oval color="#00BFFF" height={80} width={80} />

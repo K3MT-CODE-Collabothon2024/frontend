@@ -1,8 +1,8 @@
 {
-
   "1": {
     "content": "AccountSummaryWidget/AccountSummaryWidgetWide",
     "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "title": "Account Summary Wide",
     "width": 2,
     "height": 2,
     "startPosition": 1
@@ -10,13 +10,15 @@
   "2": {
     "content": "MarketData/MarketDataWidgetWide",
     "popup": "MarketData/MarketDataWidgetPopup",
+    "title": "Market Data Wide",
     "width": 2,
     "height": 4,
-    "startPosition": 13
+    "startPosition": 3
   },
   "3": {
     "content": "MarketData/MarketDataWidgetTight",
     "popup": "MarketData/MarketDataWidgetPopup",
+    "title": "Market Data Tight",
     "width": 1,
     "height": 2,
     "startPosition": 1
@@ -48,9 +50,50 @@
   "7": {
     "content": "MailWidget/MailWidgetTight",
     "popup": "MailWidget/MailWidgetPopup",
+    "title": "Mail Tight",
     "width": 1,
     "height": 2,
     "startPosition": 20
+  },
+  "8": {
+    "content": "NewsWidget/NewsWidget",
+    "popup": "NewsWidget/NewsWidgetPopup",
+    "title": "News",
+    "width": 1,
+    "height": 2,
+    "startPosition": 6
+  },
+  "9": {
+    "content": "AccountSummaryWidget/AccountAssets",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "title": "Account Assets",
+    "width": 2,
+    "height": 4,
+    "startPosition": 6
+  },
+  "10": {
+    "content": "AccountSummaryWidget/AccountAssetsSmaller",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "title": "Account Assets Smaller",
+    "width": 1,
+    "height": 2,
+    "startPosition": 20
+  },
+  "11": {
+    "content": "AccountSummaryWidget/IncomeExpensesChart",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "title": "Income Expenses Chart",
+    "width": 4,
+    "height": 2,
+    "startPosition": 6
+  },
+  "12": {
+    "content": "AccountSummaryWidget/IncomeExpensesChartSmaller",
+    "popup": "AccountSummaryWidget/AccountSummaryPopup",
+    "title": "Income Expenses Chart Smaller",
+    "width": 1,
+    "height": 2,
+    "startPosition": 6
   },
   "0": {
     "content": "AddWidget/AddWidget",
@@ -58,6 +101,6 @@
     "title": "Add Widget",
     "width": 1,
     "height": 2,
-    "startPosition": 16
+    "startPosition": 9
   }
 }

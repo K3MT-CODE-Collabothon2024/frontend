@@ -121,7 +121,7 @@ const AccountAssets: React.FC = () => {
     };
 
     return (
-        <div className="flex relative items-center justify-center">
+        <div className="h-full p-4 overflow-hidden">
             <button
                 className="absolute left-0 top-1/2 transform -translate-y-1/2 text-black font-bold opacity-50 hover:opacity-100 z-10"
                 onClick={() => handleTypeChange('left')}
