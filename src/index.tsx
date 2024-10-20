@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import BaseWidget from "./widgets/BaseWidget";
-import MarketDataWidget from "./widgets/MarketDataWidget";
+import MarketDataWidget from "./widgets/MarketDataWidgetTight";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

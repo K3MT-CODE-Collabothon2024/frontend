@@ -1,33 +1,37 @@
 {
-
   "1": {
     "content": "AccountSummaryWidgetWide",
     "popup": "AccountSummaryPopup",
     "width": 2,
     "height": 2,
-    "startPosition": 7
+    "startPosition": 1
   },
   "2": {
-    "content": "MarketDataWidget",
-    "popup": "MarketDataWidget",
-    "width": 3,
-    "height": 3,
-    "startPosition": 7
+    "content": "MarketDataWidgetWide",
+    "popup": "MarketDataWidgetPopup",
+    "width": 2,
+    "height": 4,
+    "startPosition": 3
   },
   "3": {
+    "content": "MarketDataWidgetTight",
+    "popup": "MarketDataWidgetPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 7
+  },
+  "4": {
     "content": "AccountSummaryWidgetTight",
     "popup": "AccountSummaryPopup",
     "width": 1,
     "height": 2,
-    "startPosition": 12
-  },
-    "startPosition": 9
+    "startPosition": 10
   },
   "0": {
     "content": "AddWidget",
     "popup": "AddWidgetPopup",
     "width": 1,
     "height": 2,
-    "startPosition": 9
+    "startPosition": 16
   }
 }

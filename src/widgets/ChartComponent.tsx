@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
+import { Oval } from 'react-loader-spinner';
 
 interface StockData {
     close: number;
@@ -13,14 +14,15 @@ interface StockData {
 
 interface ChartComponentProps {
     ticker: string;
+    className?: string;
 }
 
-const ChartComponent: React.FC<ChartComponentProps> = ({ ticker }) => {
+const ChartComponent: React.FC<ChartComponentProps> = ({ ticker, className }) => {
     const [data, setData] = useState<StockData[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://127.0.0.1:5000/api/stock/${ticker}?period=5y&interval=1mo`)
+        fetch(`http://127.0.0.1:5000/api/stock/historical/${ticker}?period=5y&interval=1mo`)
             .then(response => response.json())
             .then((data: StockData[]) => {
                 setData(data);
@@ -33,7 +35,11 @@ const ChartComponent: React.FC<ChartComponentProps> = ({ ticker }) => {
     }, [ticker]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="w-full h-full flex items-center justify-center">
+                <Oval color="#00BFFF" height={80} width={80} />
+            </div>
+        );
     }
 
     if (data.length === 0) {
@@ -48,7 +54,8 @@ const ChartComponent: React.FC<ChartComponentProps> = ({ ticker }) => {
     const chartOptions: ApexCharts.ApexOptions = {
         chart: {
             type: 'candlestick',
-            height: 250 // Adjusted height
+            height: '100%', // Adjusted height
+            width: '100%'   // Adjusted width
         },
         title: {
             text: `${ticker} Stock Data`,
@@ -65,9 +72,13 @@ const ChartComponent: React.FC<ChartComponentProps> = ({ ticker }) => {
     };
 
     return (
-        <div>
-            <h1>{ticker} Stock Data</h1>
-            <ReactApexChart options={chartOptions} series={[{ data: chartData }]} type="candlestick" height={250} />
+        <div className={`w-full h-full flex items-center justify-center overflow-hidden ${className}`}>
+            <div className="w-full h-full flex flex-col items-center justify-center">
+                <h1 className="text-center">{ticker} Stock Data</h1>
+                <div className="w-full h-3/4 min-h-[440px]">
+                    <ReactApexChart options={chartOptions} series={[{ data: chartData }]} type="candlestick" height="100%" />
+                </div>
+            </div>
         </div>
     );
 };
