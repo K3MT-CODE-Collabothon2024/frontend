@@ -97,10 +97,10 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
   };
 
   const openPopup = (widgetId: number) => {
-    if (!dragging) {
+    // if (!dragging) {
       setSelectedWidgetId(widgetId);
       setIsPopupOpen(true);
-    }
+   // }
   };
 
   const closePopup = () => {
@@ -109,7 +109,7 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
   };
 
   const onDragStart = (layout: RGLLayout[], oldItem: any) => {
-    setDragging(true); // Set dragging to true when drag starts
+    // setDragging(true); // Set dragging to true when drag starts
     setDraggingWidgetId(parseInt(oldItem.i));
     setShowDeleteArea(true);
   };
@@ -122,35 +122,10 @@ const Layout: React.FC<LayoutProps> = ({ ids }) => {
       setDragging(false); // Set dragging to false after a small delay
     }, 100); // 100ms delay to avoid onClick firing immediately after drag
 
-    // Handle deletion logic
-    if (deleteBoxRef.current) {
-      const deleteBoxRect = deleteBoxRef.current.getBoundingClientRect();
-      const widgetElement = document.querySelector(
-        `.react-grid-item[data-grid-id="${oldItem.i}"]`
-      );
-
-      if (widgetElement) {
-        const widgetRect = widgetElement.getBoundingClientRect();
-
-        const isOverDeleteBox =
-          widgetRect.left < deleteBoxRect.right &&
-          widgetRect.right > deleteBoxRect.left &&
-          widgetRect.top < deleteBoxRect.bottom &&
-          widgetRect.bottom > deleteBoxRect.top;
-
-        if (isOverDeleteBox) {
-          deleteWidget(draggingWidgetId!);
-        }
-      }
-    }
+    
   };
 
-  const deleteWidget = (widgetId: number) => {
-    setIndexes((prevIndexes) => prevIndexes.filter((id) => id !== widgetId));
-    console.log(`Deleted widget with id ${widgetId}`);
-    console.log("Indexes:", indexes);
-   
-  };
+  
 
   const renderPopupContent = () => {
     if (selectedWidgetId !== null) {
