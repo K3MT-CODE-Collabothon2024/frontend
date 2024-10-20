@@ -3,14 +3,28 @@
     "content": "AccountSummaryWidget/AccountSummaryWidgetWide",
     "popup": "AccountSummaryWidget/AccountSummaryPopup",
     "title": "Account Summary Wide",
-    "width": 4,
-    "height": 4
+    "width": 2,
+    "height": 2
   },
   "2": {
     "content": "AccountSummaryWidget/AccountSummaryWidgetTight",
     "popup": "AccountSummaryWidget/AccountSummaryPopup",
     "title": "Account Summary Tight",
     "width": 1,
+    "height": 2
+  },
+  "3": {
+    "content": "DueTasksWidget/DueTasksWidgetTight",
+    "popup": "DueTasksWidget/DueTasksPopup",
+    "title": "Due Tasks Tight",
+    "width": 1,
+    "height": 2
+  },
+  "4": {
+    "content": "DueTasksWidget/DueTasksWidgetWide",
+    "popup": "DueTasksWidget/DueTasksPopup",
+    "title": "Due Tasks Wide",
+    "width": 3,
     "height": 2
   }
 }

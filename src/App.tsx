@@ -1,10 +1,11 @@
+
 import "./App.css";
 import Layout from "./layout/Layout";
 import Header from "./widgets/Header";
+import idData from "./data/currentWidgetIndexes.json";
+
 
 function App() {
-
-  const ids = [0,1,2,3];
 
   return (
     <div className="App flex flex-col items-center justify-center">
@@ -14,8 +15,7 @@ function App() {
         <p className="text-2xl text-gray-500">Welcome back, Jackson Jazzman</p>
       </div>
       <div className=" w-full items-center justify-center ">
-        <Layout ids={ids}/>
-       
+        <Layout ids={idData.ids} />
       </div>
     </div>
   );

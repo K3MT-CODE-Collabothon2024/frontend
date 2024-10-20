@@ -6,7 +6,6 @@ const AddWidgetPopup: React.FC = () => {
   const [widgets, setWidgets] = useState<any[]>([]); // To store the widget data
 
   useEffect(() => {
-    // Convert the JSON data into an array of widget objects
     const widgetArray = Object.entries(widgetData).map(([id, widget]: any) => ({
       id,
       ...widget,
@@ -37,7 +36,10 @@ const AddWidgetPopup: React.FC = () => {
               <PreviewWidget widgetPath={widget.content} />
             </div>
 
-            <button className="mt-4 bg-commerzBlue text-commerzYellow p-2 rounded-lg shadow-lg">
+            <button
+              onClick={() => addWidgetToDashboard(widget.id)}
+              className="mt-4 bg-commerzBlue text-commerzYellow p-2 rounded-lg shadow-lg"
+            >
               ADD WIDGET
             </button>
           </div>
@@ -47,31 +49,46 @@ const AddWidgetPopup: React.FC = () => {
   );
 };
 
-// Dynamically import and preview the widget based on the widget content path
-const PreviewWidget: React.FC<{ widgetPath: string }> = ({ widgetPath }) => {
-    const [WidgetComponent, setWidgetComponent] = useState<React.FC | null>(null);
+const addWidgetToDashboard = (id: number) => {
+    const existingIds = JSON.parse(localStorage.getItem('widgetIds') || '[]') as number[];
   
-    useEffect(() => {
-      const loadWidget = async () => {
-        try {
-          if (widgetPath) {
-            // Dynamically import the component based on the widgetPath
-            const importedWidget = await import(`../${widgetPath}`);
-            setWidgetComponent(() => importedWidget.default); // Set the imported component
-          } else {
-            console.error("Widget path is undefined or empty:", widgetPath);
-          }
-        } catch (error) {
-          console.error("Error loading widget:", error);
-        }
-      };
+    // Ensure id is a number
+    const widgetId = Number(id);
   
-      loadWidget();
-    }, [widgetPath]);
-  
-    // Render the widget component if available, else show a loading text
-    return WidgetComponent ? <WidgetComponent /> : <p>Loading...</p>;
+    if (!existingIds.includes(widgetId)) {
+      existingIds.push(widgetId);
+      localStorage.setItem('widgetIds', JSON.stringify(existingIds));
+      window.location.reload();
+    } else {
+      console.log(`Widget with id ${widgetId} is already added.`);
+    }
   };
   
+
+// Dynamically import and preview the widget based on the widget content path
+const PreviewWidget: React.FC<{ widgetPath: string }> = ({ widgetPath }) => {
+  const [WidgetComponent, setWidgetComponent] = useState<React.FC | null>(null);
+
+  useEffect(() => {
+    const loadWidget = async () => {
+      try {
+        if (widgetPath) {
+          // Dynamically import the component based on the widgetPath
+          const importedWidget = await import(`../${widgetPath}`);
+          setWidgetComponent(() => importedWidget.default); // Set the imported component
+        } else {
+          console.error("Widget path is undefined or empty:", widgetPath);
+        }
+      } catch (error) {
+        console.error("Error loading widget:", error);
+      }
+    };
+
+    loadWidget();
+  }, [widgetPath]);
+
+  // Render the widget component if available, else show a loading text
+  return WidgetComponent ? <WidgetComponent /> : <p>Loading...</p>;
+};
 
 export default AddWidgetPopup;
