@@ -29,7 +29,6 @@ const MarketDataWidgetTight: React.FC = () => {
         fetch(`http://127.0.0.1:5000/api/customer/1/assets`)
             .then(response => response.json())
             .then(data => {
-                console.log('Fetched data:', data); 
                 if (Array.isArray(data)) {
                     const stockTickers = data
                         .filter((asset: Asset) => asset.type === 'stock')
@@ -88,7 +87,6 @@ const TickerSlide: React.FC<TickerSlideProps> = ({ ticker }) => {
         fetch(`http://127.0.0.1:5000/api/stock/current/${ticker}`)
             .then(response => response.json())
             .then(data => {
-                console.log('Fetched data:', data); 
                 if (Array.isArray(data) && data.length > 0) {
                     setCurrentData(data[0]);
                 } else {

@@ -4,7 +4,7 @@ import Header from "./widgets/Header";
 
 function App() {
 
-  const ids = [0,1,2,3];
+  const ids = [0,1,2,3,4,5];
 
   return (
     <div className="App flex flex-col items-center justify-center">
