@@ -6,11 +6,11 @@ import { ApexOptions } from "apexcharts";
 const IncomeExpensesChart: React.FC = () => {
   const [interval, setInterval] = useState<string>("yearly");
 
-  const handleIntervalChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setInterval(e.target.value);
+  const handleIntervalChange = (selectedInterval: string) => {
+    setInterval(selectedInterval);
   };
 
-  // Dane dla poszczególnych interwałów
+  // Data for each interval
   const monthlyData = {
     expenses: [400, 300, 500, 200, 400, 700, 100, 300, 400, 500, 600, 300],
     income: [600, 500, 800, 400, 700, 900, 200, 500, 700, 800, 900, 600],
@@ -31,19 +31,19 @@ const IncomeExpensesChart: React.FC = () => {
     categories: ["2023"], // year
   };
 
-  // Wybór danych na podstawie wybranego interwału
+  // Selecting data based on the chosen interval
   const currentData = interval === "monthly" ? monthlyData :
       interval === "quarterly" ? quarterlyData :
           yearlyData;
 
-  // Aktualizacja serii danych i kategorii na podstawie interwału
+  // Updating series data and categories based on the interval
   const series = [
     {
-      name: "Expenses (EUR)",
+      name: "Expenses",
       data: currentData.expenses,
     },
     {
-      name: "Income (EUR)",
+      name: "Income",
       data: currentData.income,
     },
   ];
@@ -56,7 +56,7 @@ const IncomeExpensesChart: React.FC = () => {
         show: false,
       },
     },
-    colors: ["#85021f", "#04a425"], // Kolory dla wszystkich serii (np. pierwszy dla wydatków, drugi dla przychodów)
+    colors: ["#85021f", "#04a425"], // Colors for all series (first for expenses, second for income)
     plotOptions: {
       bar: {
         horizontal: false,
@@ -93,21 +93,29 @@ const IncomeExpensesChart: React.FC = () => {
     },
   };
 
-
   return (
       <div className="container mx-auto p-4">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Income and expenses</h1>
-          <div>
-            <select
-                value={interval}
-                onChange={handleIntervalChange}
-                className="border border-gray-300 rounded p-2"
+        <div className="flex flex-col items-center mb-4">
+          <h1 className="text-2xl font-bold mb-2 text-commerzBlue">Income and Expenses</h1>
+          <div className="flex space-x-4 ">
+            <button
+                onClick={() => handleIntervalChange("monthly")}
+                className={`py-2 px-4 rounded ${interval === "monthly" ? "bg-commerzBlue text-commerzYellow" : "bg-gray-200 text-black"}`}
             >
-              <option value="yearly">All year</option>
-              <option value="quarterly">Quarterly</option>
-              <option value="monthly">Monthly</option>
-            </select>
+              Monthly
+            </button>
+            <button
+                onClick={() => handleIntervalChange("quarterly")}
+                className={`py-2 px-4 rounded ${interval === "quarterly" ? "bg-commerzBlue text-commerzYellow" : "bg-gray-200 text-black"}`}
+            >
+              Quarterly
+            </button>
+            <button
+                onClick={() => handleIntervalChange("yearly")}
+                className={`py-2 px-4 rounded ${interval === "yearly" ? "bg-commerzBlue text-commerzYellow" : "bg-gray-200 text-black"}`}
+            >
+              Yearly
+            </button>
           </div>
         </div>
         <div className="relative w-full h-96">
