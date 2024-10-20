@@ -1,5 +1,5 @@
 // newsData.ts
-import { News } from "../widgets/News";
+import { News } from "../widgets/NewsWidget/News";
 
 export const sampleNewsList: News[] = [
   {
