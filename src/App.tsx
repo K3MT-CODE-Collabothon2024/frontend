@@ -6,7 +6,6 @@ import idData from "./data/currentWidgetIndexes.json";
 
 
 function App() {
-
   return (
     <div className="App flex flex-col items-center justify-center">
       <Header />
