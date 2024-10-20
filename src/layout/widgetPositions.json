@@ -27,9 +27,16 @@
     "height": 2,
     "startPosition": 10
   },
+  "3": {
+    "content": "MailWidget/MailWidgetTight",
+    "popup": "MailWidget/MailWidgetPopup",
+    "width": 1,
+    "height": 2,
+    "startPosition": 1
+  },
   "0": {
-    "content": "AddWidget",
-    "popup": "AddWidgetPopup",
+    "content": "AddWidget/AddWidget",
+    "popup": "AddWidget/AddWidgetPopup",
     "width": 1,
     "height": 2,
     "startPosition": 16
