@@ -14,7 +14,7 @@ const BaseWidget: React.FC<BaseWidgetProps> = ({ contentWidget }) => {
       <motion.div
         className={`w-full h-full cursor-pointer bg-commerzBrightGreen text-commerzBlue rounded-lg  flex flex-col justify-start items-center`}
         whileHover={{ shadow: "shadow-lg" }}
-        whileTap={{ scale: 0.95 }}
+        //whileTap={{ scale: 0.95 }}
       >
         <div className="text-center flex-grow w-full p-2 flex items-center justify-center">
           {contentWidget}
