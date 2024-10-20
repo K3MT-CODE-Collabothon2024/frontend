@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 
@@ -24,9 +24,33 @@ const data: DataItem[] = [
     { amount: "10000.00", name: "Savings Account", type: "Accounts" },
 ];
 
+const previousData: DataItem[] = [
+    { amount: "140000.00", name: "AAPL", type: "Stock" },
+    { amount: "20000.00", name: "TSLA", type: "Stock" },
+    { amount: "9000.00", name: "AMZN", type: "Stock" },
+    { amount: "900.00", name: "USD", type: "Valutes" },
+    { amount: "800.00", name: "GBP", type: "Valutes" },
+    { amount: "190000.00", name: "JPY", type: "Valutes" },
+    { amount: "7500.00", name: "BTC", type: "Crypto" },
+    { amount: "1500.00", name: "ETH", type: "Crypto" },
+    { amount: "9000.00", name: "DOGE", type: "Crypto" },
+    { amount: "40000.00", name: "Credit Card A", type: "Creditcards" },
+    { amount: "18000.00", name: "Credit Card B", type: "Creditcards" },
+    { amount: "28000.00", name: "Loan", type: "Credits" },
+    { amount: "95000.00", name: "Savings Account", type: "Accounts" },
+];
+
 const AccountAssets: React.FC = () => {
-    const [selectedTypeIndex] = useState<number>(0);
+    const [selectedTypeIndex, setSelectedTypeIndex] = useState<number>(0);
     const types = ['All', 'Stock', 'Valutes', 'Crypto', 'Creditcards', 'Credits', 'Accounts'];
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setSelectedTypeIndex(prevIndex => (prevIndex + 1) % types.length);
+        }, 5000);
+
+        return () => clearInterval(interval); // Cleanup interval on component unmount
+    }, []);
 
     const groupDataByType = (dataToGroup: DataItem[]) => {
         return dataToGroup.reduce((acc: Record<string, number>, item: DataItem) => {
@@ -47,6 +71,14 @@ const AccountAssets: React.FC = () => {
 
     const selectedType = types[selectedTypeIndex];
     const groupedData = selectedType === 'All' ? groupDataByType(data) : groupDataByName(data, selectedType);
+    const previousGroupedData = groupDataByType(previousData);
+
+    const currentTotal = Object.values(groupedData).reduce((acc, curr) => acc + curr, 0);
+    const previousTotal = selectedType === 'All'
+        ? Object.values(previousGroupedData).reduce((acc, curr) => acc + curr, 0)
+        : previousData.filter(item => item.type === selectedType).reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
+
+    const growthPercentage = previousTotal ? ((currentTotal - previousTotal) / previousTotal) * 100 : 0;
 
     const series = Object.values(groupedData);
     const labels = selectedType === 'All' ? Object.keys(groupedData) : Object.keys(groupedData);
@@ -63,8 +95,8 @@ const AccountAssets: React.FC = () => {
     const chartOptions: ApexOptions = {
         chart: {
             type: 'donut',
-            width: 400,
-            height: 400,
+            width: 400, // Fixed width
+            height: 400, // Fixed height
         },
         colors: colors,
         labels: labels,
@@ -74,26 +106,29 @@ const AccountAssets: React.FC = () => {
             },
         },
         legend: {
-            width: 100,
-            labels: {
-                style: {
-                    fontWeight: 'bold', // Make legend names bold
-                },
-            } as any, // Type assertion
-        } as any, // Type assertion
-        responsive: [],
+          width: 100
+        },
+        responsive: [], // Disable responsive settings
+    };
+
+    const getBackgroundColor = (percentage: number) => {
+        if (percentage > 0) return 'bg-green-300';
+        if (percentage === 0) return 'bg-gray-300';
+        return 'bg-red-200';
     };
 
     return (
-        <div className="flex relative items-center justify-center">
-            <div className="flex flex-col items-center">
-                <div className="flex items-center mb-4">
-                    <h2 className="text-xl font-bold">Products Balance</h2>
-                </div>
+        <div className="flex flex-col items-center">
+            <div className="flex items-center mb-4">
+                <h2 className="text-xl font-bold">{selectedType}</h2>
+                <span
+                    className={`mt-1 ml-4 text-sm font-bold rounded-xl p-2 ${getBackgroundColor(growthPercentage)}`}>
+                    Monthly growth<div>{growthPercentage.toFixed(2)}%</div>
+                </span>
+            </div>
 
-                <div style={{ width: '400px', height: '400px' }}>
-                    <Chart options={chartOptions} series={series} type="donut" width-max={300} height-max={300} />
-                </div>
+            <div style={{ width: '400px', height: '400px' }}>
+                <Chart options={chartOptions} series={series} type="donut" />
             </div>
         </div>
     );
