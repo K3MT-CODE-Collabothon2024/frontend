@@ -8,7 +8,6 @@ import IncomeExpensesChartSmaller from './widgets/AccountSummaryWidget/IncomeExp
 function App() {
   return (
     <div className="App">
-      <BaseWidget contentWidget={<AccountAssetsSmaller/>}/>
     </div>
   );
 }
