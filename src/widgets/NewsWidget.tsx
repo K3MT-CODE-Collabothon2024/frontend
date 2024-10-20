@@ -3,7 +3,6 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import NewsStorage from './NewsStorage';
-import NewsWidgetPopup from './NewsWidgetPopup';
 import { News } from './News';
 
 const sampleNewsList: News[] = [
@@ -25,8 +24,6 @@ const sampleNewsList: News[] = [
 ];
 
 const NewsWidget: React.FC = () => {
-  const [selectedNews, setSelectedNews] = useState<News | null>(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const settings = {
     dots: false,
@@ -34,35 +31,22 @@ const NewsWidget: React.FC = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: !isPopupOpen,  // Stop slider when popup is open
+    autoplay: true,
     autoplaySpeed: 5000,
     swipe: false,
     draggable: false,
     arrows: false,
   };
 
-  const openPopup = (news: News) => {
-    setSelectedNews(news);
-    setIsPopupOpen(true);
-  };
-
-  const closePopup = () => {
-    setIsPopupOpen(false);
-  };
-
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
       <Slider {...settings} className="w-full h-full flex items-center justify-center">
         {sampleNewsList.map((news) => (
-          <div key={news.id} className="w-full h-full cursor-pointer" onClick={() => openPopup(news)}>
+          <div key={news.id} className="w-full h-full cursor-pointer">
             <NewsStorage news={news} />
           </div>
         ))}
       </Slider>
-
-      {isPopupOpen && selectedNews && (
-        <NewsWidgetPopup news={selectedNews} onClose={closePopup} />
-      )}
     </div>
   );
 };
